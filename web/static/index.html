@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CyberScore</title>
+<style>
+  :root{
+    --ink:#1f2933; --muted:#616e7c; --line:#dfe4e8; --bg:#eef1f4;
+    --card:#ffffff; --navy1:#1f4e79; --navy2:#122a44; --teal:#1e8fa0;
+    --high:#c0392b; --medium:#d68910; --low:#2471a3; --ok:#1e8449;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--bg)}
+  a{color:var(--low)}
+  header{background:linear-gradient(160deg,var(--navy1),var(--navy2));color:#eafcff;
+         padding:26px 20px}
+  .wrap{max-width:920px;margin:0 auto;padding:0 16px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand svg{width:40px;height:40px;flex:0 0 auto}
+  .brand h1{font-size:20px;margin:0;font-weight:700}
+  .brand p{margin:2px 0 0;font-size:12.5px;color:#b9d6e4}
+  .searchbar{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+  .searchbar input{flex:1;min-width:220px;padding:13px 15px;border-radius:10px;border:0;
+    font-size:15px;outline:none}
+  .searchbar button{padding:13px 22px;border:0;border-radius:10px;background:var(--teal);
+    color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+  .searchbar button:disabled{opacity:.55;cursor:default}
+  .note{margin-top:12px;font-size:12px;color:#9fc0d2}
+  /* bigger tabs */
+  .tabs{display:flex;gap:7px;margin-top:20px;flex-wrap:wrap}
+  .tab{padding:14px 26px;border:0;border-radius:11px 11px 0 0;background:rgba(255,255,255,.10);
+    color:#cfe3ee;font-size:18.5px;font-weight:700;cursor:pointer;line-height:1}
+  .tab:hover{background:rgba(255,255,255,.18)}
+  .tab.active{background:#fff;color:var(--navy2)}
+  #tab-headers textarea{width:100%;min-height:140px;margin-top:16px;padding:12px 14px;
+    border-radius:10px;border:0;font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace;
+    resize:vertical;outline:none}
+  .hrow{display:flex;align-items:center;gap:14px;margin-top:10px;flex-wrap:wrap}
+  .hrow button{padding:12px 22px;border:0;border-radius:10px;background:var(--teal);
+    color:#fff;font-size:15px;font-weight:600;cursor:pointer}
+  .hrow button:disabled{opacity:.55;cursor:default}
+  .hrow .note{margin-top:0}
+  .idcard{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin-bottom:16px}
+  .idcard .k{color:var(--muted);font-size:12px;width:120px;display:inline-block}
+  .idcard .r{padding:3px 0;border-top:1px solid var(--line);word-break:break-word}
+  .idcard .r:first-child{border-top:0}
+  .hops{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:10px 14px;margin:10px 0 4px;font:11.5px/1.5 ui-monospace,Menlo,Consolas,monospace;
+    color:var(--muted);overflow-x:auto}
+  .hops div{padding:3px 0;border-top:1px dashed var(--line);white-space:nowrap}
+  .hops div:first-child{border-top:0}
+  .verdicts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+  .vbadge{padding:22px 12px;border-radius:14px;border:2px solid var(--line);
+    background:var(--card);font-weight:800;font-size:28px;text-align:center;
+    line-height:1.05}
+  .vbadge small{display:block;color:var(--muted);font-size:13px;font-weight:700;
+    letter-spacing:.08em;margin-top:6px}
+  .vbadge.pass{color:var(--ok);border-color:#bfe6cd;background:#f2fbf5}
+  .vbadge.fail{color:var(--high);border-color:#f3c9c3;background:#fdf2f0}
+  .vbadge.warn{color:var(--medium);border-color:#f0d9ad;background:#fdf8ee}
+  .vbadge.na{color:var(--muted)}
+  /* verdict banner */
+  .verdict{border-radius:14px;padding:16px 18px;margin-bottom:18px;border:1px solid var(--line);
+    border-left:6px solid var(--muted);background:var(--card)}
+  .verdict .vtitle{font-size:19px;font-weight:800;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+  .verdict .dot{width:12px;height:12px;border-radius:50%;background:var(--muted);flex:0 0 auto}
+  .verdict p{margin:0;color:var(--ink)}
+  .verdict.legit,.verdict.safe{border-left-color:var(--ok);background:#f2fbf5}
+  .verdict.legit .dot,.verdict.safe .dot{background:var(--ok)}
+  .verdict.legit .vtitle,.verdict.safe .vtitle{color:#166a38}
+  .verdict.suspicious{border-left-color:var(--high);background:#fdf2f0}
+  .verdict.suspicious .dot{background:var(--high)} .verdict.suspicious .vtitle{color:#9a291c}
+  .verdict.caution{border-left-color:var(--medium);background:#fdf8ee}
+  .verdict.caution .dot{background:var(--medium)} .verdict.caution .vtitle{color:#8a5a0c}
+  .verdict.unverified{border-left-color:var(--muted)}
+  .verdict .why2{color:var(--muted);font-size:12.5px;margin-top:8px}
+  .verdict .why2 li{margin:2px 0}
+  .nextsteps{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:12px 16px 14px;margin-bottom:16px}
+  .nextsteps h3{margin:0 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  .nextsteps ol{margin:0;padding-left:20px} .nextsteps li{margin:4px 0}
+  /* sender card */
+  .sender{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .sfield{flex:1;min-width:200px;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:12px 15px}
+  .sfield .k{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+  .sfield .v{font-size:16px;font-weight:700;margin-top:3px;word-break:break-word}
+  .sfield .v.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px}
+  /* reputation */
+  .repwrap{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin-bottom:16px}
+  .repwrap .rhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .repdot{width:12px;height:12px;border-radius:50%;background:var(--muted)}
+  .rep-clean .repdot{background:var(--ok)} .rep-malicious .repdot{background:var(--high)}
+  .rep-suspicious .repdot{background:var(--medium)} .rep-unknown .repdot{background:var(--muted)}
+  .repwrap .rv{font-weight:800;font-size:16px}
+  .rep-clean .rv{color:#166a38} .rep-malicious .rv{color:#9a291c}
+  .rep-suspicious .rv{color:#8a5a0c} .rep-unknown .rv{color:var(--muted)}
+  .repwrap .degraded{margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.04em;
+    color:#8a5a0c;background:#fdf8ee;border:1px solid #f0d9ad;border-radius:999px;padding:3px 10px}
+  .eng{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+  .eng:first-of-type{border-top:0;margin-top:8px}
+  .eng .en{font-weight:700} .eng .ev{color:var(--muted);text-align:right;word-break:break-word}
+  .eng .ev.bad{color:var(--high);font-weight:700} .eng .ev.good{color:var(--ok)}
+  .repnote{color:var(--muted);font-size:12px;margin-top:8px}
+  /* screenshot */
+  .shotwrap{margin:0 0 18px}
+  .shotwrap img{width:100%;border:1px solid var(--line);border-radius:12px;display:block;background:#0b1625}
+  .shotwrap .cap{color:var(--muted);font-size:12px;margin-top:6px}
+  .shotna{background:var(--card);border:1px dashed var(--line);border-radius:12px;
+    padding:16px;color:var(--muted);font-size:13px}
+  main{max-width:920px;margin:0 auto;padding:22px 16px 60px}
+  .hidden{display:none}
+  .spinner{width:26px;height:26px;border:3px solid #cfd8de;border-top-color:var(--teal);
+    border-radius:50%;animation:spin .8s linear infinite;display:inline-block;vertical-align:middle}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading{padding:26px 4px;color:var(--muted)}
+  .err{background:#fdecea;border:1px solid #f5c6c0;color:#8a1f16;padding:12px 14px;
+    border-radius:10px}
+  .summary{display:flex;gap:16px;flex-wrap:wrap;align-items:stretch;margin-bottom:20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px}
+  .score{flex:1;min-width:220px;padding:18px 22px;display:flex;align-items:center;gap:18px}
+  .score .num{font-size:52px;font-weight:800;line-height:1}
+  .score .of{font-size:16px;color:var(--muted)}
+  .score .grade{font-size:15px;color:var(--muted);margin-top:4px}
+  .gauge{--v:0;width:76px;height:76px;border-radius:50%;flex:0 0 auto;
+    background:conic-gradient(var(--gc) calc(var(--v)*1%),#e6eaee 0);
+    display:flex;align-items:center;justify-content:center}
+  .gauge span{width:56px;height:56px;border-radius:50%;background:#fff;display:flex;
+    align-items:center;justify-content:center;font-weight:700;font-size:15px}
+  .chips{display:flex;gap:10px;flex:0 0 auto}
+  .chip{min-width:78px;padding:14px 8px;border-radius:12px;text-align:center;
+    background:var(--card);border:1px solid var(--line)}
+  .chip b{display:block;font-size:26px;line-height:1}
+  .chip small{color:var(--muted);font-size:11px;letter-spacing:.04em}
+  .chip.high b{color:var(--high)} .chip.medium b{color:var(--medium)} .chip.low b{color:var(--low)}
+  .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    margin-bottom:12px}
+  .toolbar .target{font-weight:600}
+  .toolbar .stamp{color:var(--muted);font-size:12px}
+  .pdfbtn{padding:10px 16px;border:0;border-radius:9px;background:var(--navy1);color:#fff;
+    font-weight:600;cursor:pointer;text-decoration:none;display:inline-block}
+  h2.sec{font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
+    margin:22px 0 8px}
+  .checks{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .row{display:flex;gap:12px;padding:9px 14px;border-top:1px solid var(--line);align-items:baseline}
+  .row:first-child{border-top:0}
+  .badge{flex:0 0 46px;font-size:11px;font-weight:700;letter-spacing:.03em}
+  .badge.ok{color:var(--ok)} .badge.fail{color:var(--high)}
+  .badge.warn{color:var(--medium)} .badge.info{color:var(--muted)}
+  .row .label{flex:1;min-width:120px}
+  .row .detail{color:var(--muted);font-size:12.5px;flex:1;text-align:right;word-break:break-word}
+  .rem{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:0;margin-bottom:10px;overflow:hidden}
+  .rem .head{display:flex;justify-content:space-between;gap:12px;align-items:center;
+    padding:12px 14px;border-left:4px solid var(--muted);background:#fafbfc}
+  .rem.high .head{border-left-color:var(--high)}
+  .rem.medium .head{border-left-color:var(--medium)}
+  .rem.low .head{border-left-color:var(--low)}
+  .rem .head .t{font-weight:700}
+  .rem .head .meta{font-size:12px;color:var(--muted);white-space:nowrap}
+  .rem .sev{font-weight:700}
+  .rem.high .sev{color:var(--high)} .rem.medium .sev{color:var(--medium)} .rem.low .sev{color:var(--low)}
+  .rem .body{padding:10px 16px 14px}
+  .rem .why{color:var(--muted);margin:0 0 8px}
+  .rem ol{margin:0 0 8px;padding-left:20px}
+  .rem li{margin:2px 0}
+  .rem .refs{font-size:12px;color:var(--muted)}
+  .allclear{background:#eafaf0;border:1px solid #bfe6cd;color:#1e6b3f;padding:16px;
+    border-radius:12px;font-weight:600}
+  /* tools tab */
+  .disclaim{background:#fdf8ee;border:1px solid #f0d9ad;color:#8a5a0c;border-radius:12px;
+    padding:12px 14px;margin:4px 0 18px;font-size:12.5px}
+  .ourapps{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-bottom:10px}
+  .app{background:linear-gradient(180deg,#102234,#0c1a2a);border:1px solid #1f3b55;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .app .shot{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;border-bottom:1px solid #1f3b55;background:#070b12}
+  .app .body{padding:14px 16px;display:flex;flex-direction:column;flex:1}
+  .app .nm{font-size:16px;font-weight:800;color:#eafcff}
+  .app .mine{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.06em;color:#0a6b58;background:#d9f7ee;border:1px solid #9fe4d2;border-radius:999px;padding:2px 8px;margin-left:7px;vertical-align:middle}
+  .app p{margin:7px 0 14px;color:#a9c2d6;font-size:13px;flex:1}
+  .app .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+  .app a.btn{text-decoration:none;background:var(--teal);color:#fff;font-weight:700;font-size:13px;padding:9px 14px;border-radius:9px}
+  .app a.btn.dark{background:var(--navy1)}
+  .sec.ours{color:var(--navy1);font-size:15px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-bottom:6px}
+  .tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column}
+  .tool .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .tool .nm{font-weight:800;font-size:15px}
+  .tool .free{font-size:9.5px;font-weight:800;letter-spacing:.05em;color:#0a6b58;background:#d9f7ee;border:1px solid #9fe4d2;border-radius:999px;padding:2px 8px}
+  .tool .os{margin-left:auto;font-size:11px;color:var(--muted)}
+  .tool p{margin:8px 0 14px;color:var(--muted);font-size:13px;flex:1}
+  .tool a.btn{align-self:flex-start;text-decoration:none;background:var(--navy1);color:#fff;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:9px}
+  .tool a.btn.web{background:var(--teal)}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:0 16px 30px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 512 512" aria-hidden="true">
+        <rect x="0" y="0" width="512" height="512" rx="112" fill="#153350"/>
+        <path d="M256 84 L400 132 C400 132 400 300 256 428 C112 300 112 132 112 132 Z"
+              fill="#37b6c4" stroke="#eafcff" stroke-width="16" stroke-linejoin="round"/>
+        <circle cx="248" cy="248" r="70" fill="none" stroke="#0d2036" stroke-width="26"/>
+        <circle cx="248" cy="248" r="70" fill="none" stroke="#eafcff" stroke-width="14"/>
+        <line x1="300" y1="300" x2="356" y2="356" stroke="#0d2036" stroke-width="40" stroke-linecap="round"/>
+        <line x1="300" y1="300" x2="356" y2="356" stroke="#eafcff" stroke-width="22" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <h1>CyberScore</h1>
+        <p>Your website's security grade · HTTPS · TLS · DNS · Email · Technology</p>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab active" data-tab="scan">Website scan</button>
+      <button class="tab" data-tab="url">URL check</button>
+      <button class="tab" data-tab="headers">Email headers</button>
+      <button class="tab" data-tab="tools">Tools</button>
+    </div>
+
+    <div id="tab-scan">
+      <form class="searchbar" id="form">
+        <input id="target" placeholder="Enter a website, e.g. example.com" autocomplete="off" autofocus>
+        <button id="go" type="submit">Scan</button>
+      </form>
+      <div class="note">Only scan websites you own or are authorised to test.</div>
+    </div>
+
+    <div id="tab-url" hidden>
+      <form class="searchbar" id="uform">
+        <input id="url" placeholder="Paste a link to check, e.g. https://example.com/login" autocomplete="off">
+        <button id="ugo" type="submit">Check URL</button>
+      </form>
+      <div class="note">We inspect the link safely and show a reputation check and a preview — we never log you in or submit anything.</div>
+    </div>
+
+    <div id="tab-headers" hidden>
+      <form id="hform">
+        <textarea id="headers" placeholder="Paste the full raw email headers here (From, Return-Path, Authentication-Results, Received, ...)"></textarea>
+        <div class="hrow">
+          <button id="hgo" type="submit">Analyze headers</button>
+          <span class="note">Tip: in Gmail open a message → ⋮ → “Show original”; in Outlook → File → Properties.</span>
+        </div>
+      </form>
+    </div>
+
+    <div id="tab-tools" hidden>
+      <div class="note">Hand-picked security tools. Everything downloads from each tool's <b>official</b> site — CyberScore does not host any downloads.</div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="loading" class="loading hidden"><span class="spinner"></span>&nbsp; <span id="loadingMsg">Working</span> <b id="loadingTarget"></b> …</div>
+  <div id="error" class="err hidden"></div>
+  <div id="results" class="hidden"></div>
+  <div id="tools" class="hidden"></div>
+</main>
+
+<footer>CyberScore v0.1 · cyberscore.cc · passive, non-invasive scanning</footer>
+
+<script>
+const $ = (id)=>document.getElementById(id);
+const results=$('results'), loading=$('loading'), errBox=$('error'), toolsBox=$('tools');
+
+const GAUGE_COLOR = (s)=> s>=80 ? 'var(--ok)' : s>=60 ? 'var(--medium)' : 'var(--high)';
+const BADGE = {ok:'PASS',fail:'FAIL',warn:'WARN',info:'INFO'};
+const MODULE_TITLES = {http:'HTTP / Security Headers', tls:'TLS / Certificate',
+  dns:'DNS', email:'Email Security', technology:'Technology'};
+const esc = (s)=> String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function showLoading(msg, target){
+  results.classList.add('hidden'); errBox.classList.add('hidden'); toolsBox.classList.add('hidden');
+  $('loadingMsg').textContent = msg; $('loadingTarget').textContent = target||'';
+  loading.classList.remove('hidden');
+}
+function showError(msg){
+  loading.classList.add('hidden');
+  errBox.textContent = msg; errBox.classList.remove('hidden');
+}
+
+/* ================= Website scan ================= */
+const form=$('form'), goBtn=$('go');
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const target = $('target').value.trim();
+  if(!target) return;
+  showLoading('Scanning', target); goBtn.disabled = true; goBtn.textContent='Scanning…';
+  try{
+    const r = await fetch('/api/scan', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({target})});
+    if(!r.ok){ const j = await r.json().catch(()=>({detail:r.statusText})); throw new Error(j.detail||'Scan failed'); }
+    render(await r.json());
+  }catch(err){ showError('Could not complete the scan: ' + err.message); }
+  finally{ loading.classList.add('hidden'); goBtn.disabled=false; goBtn.textContent='Scan'; }
+});
+
+function render(d){
+  const counts = d.counts||{HIGH:0,MEDIUM:0,LOW:0};
+  const gc = GAUGE_COLOR(d.score);
+  let html = '';
+  html += `<div class="summary">
+    <div class="card score">
+      <div class="gauge" style="--v:${d.score};--gc:${gc}"><span>${d.score}</span></div>
+      <div><div class="num" style="color:${gc}">${d.score}<span class="of">/100</span></div>
+      <div class="grade">Grade ${esc(d.grade)}</div></div>
+    </div>
+    <div class="chips">
+      <div class="chip high"><b>${counts.HIGH}</b><small>HIGH</small></div>
+      <div class="chip medium"><b>${counts.MEDIUM}</b><small>MEDIUM</small></div>
+      <div class="chip low"><b>${counts.LOW}</b><small>LOW</small></div>
+    </div>
+  </div>`;
+  html += `<div class="toolbar">
+    <div><span class="target">${esc(d.target)}</span> &nbsp;<span class="stamp">${esc(d.scanned_at||'')}</span></div>
+    <a class="pdfbtn" href="/api/report.pdf?target=${encodeURIComponent(d.target)}">⬇ Download PDF report</a>
+  </div>`;
+  const order = ['http','tls','dns','email','technology'];
+  for(const key of order){
+    const m = (d.modules||{})[key];
+    if(!m) continue;
+    html += `<h2 class="sec">${esc(MODULE_TITLES[key]||key)}</h2>`;
+    if(m.error && (!m.checks||!m.checks.length)){
+      html += `<div class="checks"><div class="row"><span class="badge warn">n/a</span>
+        <span class="label">${esc(m.error)}</span></div></div>`;
+      continue;
+    }
+    html += '<div class="checks">';
+    for(const c of (m.checks||[])){
+      html += `<div class="row"><span class="badge ${c.status}">${BADGE[c.status]||''}</span>
+        <span class="label">${esc(c.label)}</span>
+        <span class="detail">${esc(c.detail||'')}</span></div>`;
+    }
+    html += '</div>';
+  }
+  html += remCards(d.remediation||[]);
+  results.innerHTML = html; results.classList.remove('hidden');
+}
+
+function remCards(plan){
+  let html = `<h2 class="sec">Remediation plan</h2>`;
+  if(!plan.length) return html + `<div class="allclear">No issues found — nothing to remediate. Well done.</div>`;
+  for(const it of plan){
+    const sev = (it.severity||'').toLowerCase();
+    const steps = (it.steps||[]).map(s=>`<li>${esc(s)}</li>`).join('');
+    const refs = (it.refs||[]).map(u=>`<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>`).join(' · ');
+    html += `<div class="rem ${sev}">
+      <div class="head">
+        <span class="t">${it.priority}. ${esc(it.title)}</span>
+        <span class="meta"><span class="sev">${esc(it.severity)}</span> · effort: ${esc(it.effort)}</span>
+      </div>
+      <div class="body">
+        ${it.why?`<p class="why">${esc(it.why)}</p>`:''}
+        ${it.evidence?`<p class="why"><i>Observed:</i> ${esc(it.evidence)}</p>`:''}
+        ${steps?`<ol>${steps}</ol>`:''}
+        ${refs?`<div class="refs">Reference: ${refs}</div>`:''}
+      </div>
+    </div>`;
+  }
+  return html;
+}
+
+/* ================= URL check ================= */
+const uform=$('uform'), ugo=$('ugo');
+uform.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const url = $('url').value.trim();
+  if(!url) return;
+  showLoading('Checking', url); ugo.disabled=true; ugo.textContent='Checking…';
+  try{
+    const r = await fetch('/api/analyze-url',{method:'POST',headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({url})});
+    if(!r.ok){ const j=await r.json().catch(()=>({detail:r.statusText})); throw new Error(j.detail||'Check failed'); }
+    renderUrl(await r.json());
+  }catch(err){ showError('Could not check the URL: ' + err.message); }
+  finally{ loading.classList.add('hidden'); ugo.disabled=false; ugo.textContent='Check URL'; }
+});
+
+function renderUrl(d){
+  const x = d.data||{};
+  const v = x.verdict||{};
+  let html = '';
+
+  // verdict banner
+  const reasons = (v.reasons||[]).map(s=>`<li>${esc(s)}</li>`).join('');
+  html += `<div class="verdict ${esc(v.level||'unverified')}">
+    <p class="vtitle"><span class="dot"></span>${esc(v.title||'URL check')}</p>
+    <p>${esc(v.summary||'')}</p>
+    ${reasons?`<ul class="why2">${reasons}</ul>`:''}
+  </div>`;
+  const steps = (v.next_steps||[]).map(s=>`<li>${esc(s)}</li>`).join('');
+  if(steps) html += `<div class="nextsteps"><h3>What to do next</h3><ol>${steps}</ol></div>`;
+
+  // destination fields
+  html += `<h2 class="sec">Destination</h2><div class="sender">
+    <div class="sfield"><div class="k">Host</div><div class="v">${esc(x.host||'—')}</div></div>
+    <div class="sfield"><div class="k">Resolved IP</div><div class="v mono">${esc(x.resolved_ip||'—')}</div></div>
+    <div class="sfield"><div class="k">Scheme</div><div class="v">${esc((x.scheme||'—').toUpperCase())}</div></div>
+  </div>`;
+  if(x.final_url && x.final_url!==x.normalized){
+    html += `<div class="idcard"><div class="r"><span class="k">Final URL</span> ${esc(x.final_url)}</div></div>`;
+  }
+
+  // reputation
+  html += repCard(d.reputation||{});
+
+  // screenshot
+  html += `<h2 class="sec">Page preview</h2>`;
+  if(d.screenshot){
+    html += `<div class="shotwrap"><img src="${d.screenshot}" alt="screenshot of the page">
+      <div class="cap">Rendered safely on CyberScore's server — you did not visit the page.</div></div>`;
+  }else{
+    html += `<div class="shotna">No preview available (the page could not be rendered, or the preview engine is not installed on this server). The checks above still apply.</div>`;
+  }
+
+  // signals
+  html += `<h2 class="sec">Signals</h2><div class="checks">`;
+  for(const c of (d.checks||[])){
+    html += `<div class="row"><span class="badge ${c.status}">${BADGE[c.status]||''}</span>
+      <span class="label">${esc(c.label)}</span>
+      <span class="detail">${esc(c.detail||'')}</span></div>`;
+  }
+  html += `</div>`;
+
+  html += remCards(d.remediation||[]);
+  results.innerHTML = html; results.classList.remove('hidden');
+}
+
+function repCard(rep){
+  if(!rep || !rep.verdict) return '';
+  const vmap = {clean:'Clean', malicious:'Malicious', suspicious:'Suspicious', unknown:'No data'};
+  let html = `<h2 class="sec">Reputation</h2><div class="repwrap rep-${esc(rep.verdict)}">
+    <div class="rhead"><span class="repdot"></span>
+      <span class="rv">${esc(vmap[rep.verdict]||rep.verdict)}</span>
+      ${rep.degraded?`<span class="degraded">HEURISTIC FALLBACK</span>`:''}
+    </div>`;
+  const engines = rep.engines||[];
+  if(engines.length){
+    for(const e of engines){
+      const bad = (e.verdict==='malicious'||e.verdict==='suspicious');
+      html += `<div class="eng"><span class="en">${esc(e.provider)}</span>
+        <span class="ev ${bad?'bad':(e.verdict==='clean'?'good':'')}">${esc(e.detail||e.verdict)}${e.reference?` · <a href="${esc(e.reference)}" target="_blank" rel="noopener">report ↗</a>`:''}</span></div>`;
+    }
+  }
+  if(rep.degraded){
+    const hr = (rep.heuristic_reasons||[]).map(s=>esc(s)).join('; ');
+    html += `<div class="repnote">${esc(rep.fallback_reason||'')}${hr?` Signals: ${hr}.`:''}</div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+/* ================= Email headers ================= */
+const hform=$('hform'), hgo=$('hgo');
+hform.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const headers = $('headers').value.trim();
+  if(!headers) return;
+  showLoading('Analyzing headers',''); hgo.disabled=true; hgo.textContent='Analyzing…';
+  try{
+    const r = await fetch('/api/analyze-headers',{method:'POST',headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({headers})});
+    if(!r.ok){ const j=await r.json().catch(()=>({detail:r.statusText})); throw new Error(j.detail||'Analysis failed'); }
+    renderHeaders(await r.json());
+  }catch(err){ showError('Could not analyze headers: ' + err.message); }
+  finally{ loading.classList.add('hidden'); hgo.disabled=false; hgo.textContent='Analyze headers'; }
+});
+
+function vbadge(label, val){
+  const v = (val||'').toLowerCase();
+  let cls = 'na';
+  if(v==='pass') cls='pass';
+  else if(v==='fail'||v==='softfail'||v==='hardfail') cls='fail';
+  else if(v) cls='warn';
+  return `<div class="vbadge ${cls}">${esc((val||'n/a').toUpperCase())}<small>${label}</small></div>`;
+}
+
+function renderHeaders(d){
+  const x = d.data||{};
+  const v = x.verdict||null;
+  let html = '';
+  if(v){
+    const steps = (v.next_steps||[]).map(s=>`<li>${esc(s)}</li>`).join('');
+    const reasons = (v.reasons||[]).map(s=>`<li>${esc(s)}</li>`).join('');
+    html += `<div class="verdict ${esc(v.level)}">
+      <p class="vtitle"><span class="dot"></span>${esc(v.title)}</p>
+      <p>${esc(v.summary)}</p>
+      ${reasons?`<ul class="why2">${reasons}</ul>`:''}
+    </div>`;
+    html += `<div class="nextsteps"><h3>What to do next</h3><ol>${steps}</ol></div>`;
+  }
+  html += `<h2 class="sec">Sender</h2><div class="sender">
+    <div class="sfield"><div class="k">From domain</div><div class="v">${esc(x.from_domain||'—')}</div></div>
+    <div class="sfield"><div class="k">Sending IP</div><div class="v mono">${esc(x.sending_ip||'not found')}</div></div>
+    <div class="sfield"><div class="k">Sending server</div><div class="v mono">${esc(x.sending_host||'—')}</div></div>
+  </div>`;
+  const a = x.auth||{};
+  html += `<h2 class="sec">Authentication</h2><div class="verdicts">
+    ${vbadge('SPF', a.spf)} ${vbadge('DKIM', a.dkim)} ${vbadge('DMARC', a.dmarc)}
+  </div>`;
+  const rows = [
+    ['From', x.from], ['Return-Path', x.return_path], ['Reply-To', x.reply_to],
+    ['To', x.to], ['Subject', x.subject], ['Date', x.date],
+  ].filter(r=>r[1]);
+  html += `<h2 class="sec">Message details</h2><div class="idcard">` + rows.map(r=>
+    `<div class="r"><span class="k">${esc(r[0])}</span> ${esc(r[1])}</div>`).join('') + `</div>`;
+  html += `<h2 class="sec">Signals</h2><div class="checks">`;
+  for(const c of (d.checks||[])){
+    html += `<div class="row"><span class="badge ${c.status}">${BADGE[c.status]||''}</span>
+      <span class="label">${esc(c.label)}</span>
+      <span class="detail">${esc(c.detail||'')}</span></div>`;
+  }
+  html += `</div>`;
+  const hops = x.received||[];
+  if(hops.length){
+    html += `<h2 class="sec">Delivery path (${hops.length} hop${hops.length>1?'s':''})</h2>`;
+    html += `<div class="hops">` + hops.map((h,i)=>`<div>${i+1}. ${esc(h)}</div>`).join('') + `</div>`;
+  }
+  html += remCards(d.remediation||[]);
+  results.innerHTML = html; results.classList.remove('hidden');
+}
+
+/* ================= Tools tab ================= */
+const OUR_APPS = [
+  ["NetScope","Discover every device on your network, then click any one to see its open ports, MAC, vendor and device type.","/static/img/netscope.png","OUR APP",
+    [["⬇ Windows (.exe)","/static/downloads/NetScope.exe",false],["⬇ Source (.zip)","/static/downloads/NetScope-source.zip",true]]],
+  ["PingGrid","Monitor many devices at once on a live dashboard — latency, uptime and instant up/down status.","/static/img/pinggrid.png","OUR APP",
+    [["⬇ Windows (.exe)","/static/downloads/PingGrid.exe",false],["⬇ Source (.zip)","/static/downloads/PingGrid-source.zip",true]]],
+  ["SPF & DMARC Tool","Check and generate your domain's email anti-spoofing records in seconds — no signup.","/static/img/spf.png","FREE",
+    [["Open tool ↗","#",false]]],
+  ["Endpoint Management","Manage, patch and secure all your company's computers from one dashboard.",null,"OUR APP",
+    [["Learn more ↗","#",true]]],
+  ["CyberScore","Grade any website's security — HTTPS, TLS, DNS, email and tech — with a fix-it plan.",null,"OUR APP",
+    [["Open ↗","https://cyberscore.cc",true]]],
+];
+const TOOLS = {
+ "Passwords & 2FA":[
+  ["Bitwarden","Free, open-source password manager that syncs across all devices.","Win/Mac/Linux/Mobile",true,"https://bitwarden.com/download/"],
+  ["KeePassXC","Offline, open-source password vault — your data never leaves your device.","Win/Mac/Linux",true,"https://keepassxc.org/download/"],
+  ["Aegis Authenticator","Open-source 2FA codes with encrypted backups (Android).","Android",true,"https://getaegis.app/"],
+ ],
+ "Anti-malware":[
+  ["Malwarebytes","Popular on-demand malware scanner & cleaner; strong free version.","Win/Mac/Mobile",true,"https://www.malwarebytes.com/mwb-download"],
+  ["Microsoft Defender","Built-in, always-on protection for Windows — make sure it's enabled.","Windows",true,"https://www.microsoft.com/en-us/windows/comprehensive-security"],
+  ["ClamAV","Open-source antivirus engine, great for servers and scripting.","Win/Mac/Linux",true,"https://www.clamav.net/downloads"],
+ ],
+ "Browser & privacy":[
+  ["uBlock Origin","Efficient, open-source ad & tracker blocker for your browser.","Extension",true,"https://ublockorigin.com/"],
+  ["Mozilla Firefox","Privacy-respecting, independent browser with strong defaults.","Win/Mac/Linux/Mobile",true,"https://www.mozilla.org/firefox/new/"],
+  ["Tor Browser","Browse anonymously over the Tor network.","Win/Mac/Linux/Android",true,"https://www.torproject.org/download/"],
+ ],
+ "VPN":[
+  ["Proton VPN","Swiss-based VPN with a genuinely free tier (no logs).","Win/Mac/Linux/Mobile",true,"https://protonvpn.com/download"],
+  ["Mullvad VPN","Privacy-first VPN with flat pricing and no account email.","Win/Mac/Linux/Mobile",false,"https://mullvad.net/en/download"],
+ ],
+ "Encryption":[
+  ["VeraCrypt","Open-source on-the-fly disk & file encryption.","Win/Mac/Linux",true,"https://veracrypt.fr/en/Downloads.html"],
+  ["Gpg4win","PGP email & file encryption toolkit for Windows.","Windows",true,"https://www.gpg4win.org/download.html"],
+ ],
+ "For website owners & testing":[
+  ["OWASP ZAP","Free, open-source web-app security scanner.","Win/Mac/Linux",true,"https://www.zaproxy.org/download/"],
+  ["Nmap","The classic network discovery & port-scanning tool.","Win/Mac/Linux",true,"https://nmap.org/download.html"],
+  ["Wireshark","Deep network-protocol analyzer for troubleshooting & forensics.","Win/Mac/Linux",true,"https://www.wireshark.org/download.html"],
+  ["Certbot (Let's Encrypt)","Get & auto-renew free TLS certificates for your site.","Linux/Win",true,"https://certbot.eff.org/"],
+ ],
+ "Free online checks (no download)":[
+  ["Have I Been Pwned","Check if your email/password appeared in a data breach.","Web",true,"https://haveibeenpwned.com/"],
+  ["Mozilla HTTP Observatory","Grade your website's security headers for free.","Web",true,"https://developer.mozilla.org/en-US/observatory"],
+  ["Qualys SSL Labs","The deep-dive TLS/SSL test for any website.","Web",true,"https://www.ssllabs.com/ssltest/"],
+ ],
+};
+let toolsBuilt = false;
+function buildTools(){
+  if(toolsBuilt) return; toolsBuilt = true;
+  let html = `<div class="disclaim">⚠️ Always download from the official website (links below). Verify the site's address before installing anything.</div>`;
+  html += `<h2 class="sec ours">⭐ Our apps</h2><div class="ourapps">`;
+  for(const [nm,desc,img,tag,buttons] of OUR_APPS){
+    const shot = img
+      ? `<img class="shot" src="${esc(img)}" alt="${esc(nm)} screenshot">`
+      : `<div class="shot" style="display:flex;align-items:center;justify-content:center;color:#2ff3ff;font:800 42px ui-monospace,monospace">${nm==='CyberScore'?'🛡️':'🖥️'}</div>`;
+    const btns = buttons.map(([label,href,dark])=>
+      `<a class="btn ${dark?'dark':''}" href="${esc(href)}" target="_blank" rel="noopener">${esc(label)}</a>`).join('');
+    html += `<div class="app">${shot}<div class="body">
+      <div class="nm">${esc(nm)} <span class="mine">${esc(tag)}</span></div>
+      <p>${esc(desc)}</p>
+      <div class="btns">${btns}</div>
+    </div></div>`;
+  }
+  html += `</div>`;
+  for(const [cat,items] of Object.entries(TOOLS)){
+    html += `<h2 class="sec">${esc(cat)}</h2><div class="grid">`;
+    html += items.map(([nm,desc,os,free,url])=>{
+      const web = os==="Web";
+      return `<div class="tool"><div class="top"><span class="nm">${esc(nm)}</span>
+        ${free?'<span class="free">FREE</span>':''}<span class="os">${esc(os)}</span></div>
+        <p>${esc(desc)}</p>
+        <a class="btn ${web?'web':''}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${web?'Open ↗':'Download ↗'}</a>
+      </div>`;
+    }).join('');
+    html += `</div>`;
+  }
+  toolsBox.innerHTML = html;
+}
+
+/* ================= Tabs ================= */
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    const which = t.dataset.tab;
+    $('tab-scan').hidden = which!=='scan';
+    $('tab-url').hidden = which!=='url';
+    $('tab-headers').hidden = which!=='headers';
+    $('tab-tools').hidden = which!=='tools';
+    results.classList.add('hidden'); errBox.classList.add('hidden'); loading.classList.add('hidden');
+    if(which==='tools'){ buildTools(); toolsBox.classList.remove('hidden'); }
+    else { toolsBox.classList.add('hidden'); }
+  });
+});
+</script>
+</body>
+</html>

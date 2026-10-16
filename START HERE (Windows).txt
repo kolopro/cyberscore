@@ -1,0 +1,31 @@
+CYBERSCORE v0.1  (cyberscore.cc) — Windows quick start
+======================================================
+
+REQUIREMENT
+-----------
+Python 3 must be installed. If it isn't, get it from:
+    https://www.python.org/downloads/
+During install, tick "Add python.exe to PATH".
+
+RUN IT
+------
+Option A — desktop icon (recommended):
+    1. Double-click "Create Desktop Icon.bat"  (one time only).
+    2. A "Security Scanner" icon appears on your Desktop.
+    3. Double-click that icon whenever you want to scan a site.
+
+Option B — run in place:
+    Just double-click "Security Scanner.bat" in this folder.
+
+WHAT HAPPENS
+------------
+- It asks you to type a website (e.g. example.com).
+- It runs a passive scan (a few seconds).
+- It creates a PDF report in this folder and opens it automatically.
+- The PDF includes the security score and a prioritised remediation plan.
+
+NOTES
+-----
+- The first run installs a few Python packages automatically (needs internet).
+- This is a PASSIVE, non-invasive scanner. Only scan sites you own or are
+  authorised to test.

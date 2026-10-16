@@ -1,0 +1,4 @@
+cyberscore.cc, www.cyberscore.cc {
+	encode gzip
+	reverse_proxy app:8000
+}
