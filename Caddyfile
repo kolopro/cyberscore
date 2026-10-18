@@ -1,4 +1,24 @@
 cyberscore.cc, www.cyberscore.cc {
 	encode gzip
+
+	# --- Security headers (applied to every response) ---
+	header {
+		# Force HTTPS for a year, subdomains included, and allow preload-list inclusion.
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		# Stop browsers from MIME-sniffing a response away from its declared type.
+		X-Content-Type-Options "nosniff"
+		# Disallow the site being framed by other origins (clickjacking protection).
+		X-Frame-Options "SAMEORIGIN"
+		# Don't leak full URLs to other sites in the Referer header.
+		Referrer-Policy "strict-origin-when-cross-origin"
+		# Deny powerful browser features the site doesn't use.
+		Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()"
+		# Content-Security-Policy. 'unsafe-inline' is needed for the inline charts/JS;
+		# the google/doubleclick origins keep AdSense working once it's enabled.
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com https://*.doubleclick.net https://*.googleadservices.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https:; frame-src https://googleads.g.doubleclick.net https://*.doubleclick.net https://*.google.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
+		# Hide the server software banner.
+		-Server
+	}
+
 	reverse_proxy app:8000
 }
