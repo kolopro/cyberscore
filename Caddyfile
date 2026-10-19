@@ -1,4 +1,9 @@
-cyberscore.cc, www.cyberscore.cc {
+# Canonical domain: www.cyberscore.cc permanently redirects to the apex.
+www.cyberscore.cc {
+	redir https://cyberscore.cc{uri} permanent
+}
+
+cyberscore.cc {
 	encode gzip
 
 	# --- Security headers (applied to every response) ---
