@@ -192,3 +192,113 @@ def run(host: str) -> ModuleResult:
         result.add_check("legacy_tls", "Legacy TLS (<=1.1) disabled", Status.OK)
 
     return result
+
+
+def _populate_deep(result: ModuleResult, deep: dict) -> None:
+    """Fill a ModuleResult with checks/findings from a deep_scan() dict."""
+    result.data["deep"] = deep
+    g = deep.get("grade", "")
+    g_status = (Status.OK if g in ("A+", "A", "B")
+                else Status.WARN if g in ("C", "D") else Status.FAIL)
+    result.add_check("tls_grade", "Overall TLS grade", g_status, g)
+
+    # Obsolete protocols (SSL 2.0 / 3.0) — stronger than the 1.0/1.1 warning.
+    obsolete = [p for p in deep.get("weak_protocols", []) if p.startswith("SSL")]
+    if obsolete:
+        result.add_check("ssl_obsolete", "Obsolete SSL disabled", Status.FAIL,
+                         ", ".join(obsolete))
+        result.add_finding(
+            Severity.HIGH, f"Obsolete protocol enabled: {', '.join(obsolete)}",
+            "Disable SSL 2.0 and SSL 3.0 entirely; allow only TLS 1.2 and 1.3.",
+            code="tls.weak_protocol",
+        )
+
+    fs = deep.get("forward_secrecy")
+    if fs == "all":
+        result.add_check("forward_secrecy", "Forward secrecy", Status.OK)
+    elif fs in ("partial", "none"):
+        result.add_check("forward_secrecy", "Forward secrecy", Status.WARN, fs)
+        result.add_finding(
+            Severity.MEDIUM if fs == "none" else Severity.LOW,
+            "Forward secrecy is not guaranteed for all connections",
+            "Prefer ECDHE/DHE cipher suites so past traffic stays safe if the "
+            "key is later compromised.",
+            code="tls.no_forward_secrecy",
+        )
+
+    if deep.get("weak_ciphers"):
+        result.add_check("weak_ciphers", "No weak cipher suites", Status.FAIL,
+                         f"{len(deep['weak_ciphers'])} weak")
+        result.add_finding(
+            Severity.MEDIUM, "Weak cipher suites are enabled",
+            "Disable RC4, 3DES, NULL, EXPORT and anonymous ciphers; keep modern "
+            "AEAD suites (AES-GCM, ChaCha20-Poly1305).",
+            evidence=", ".join(deep["weak_ciphers"][:6]),
+            code="tls.weak_cipher",
+        )
+    else:
+        result.add_check("weak_ciphers", "No weak cipher suites", Status.OK)
+
+    v = deep.get("vulns", {})
+    vuln_hits = []
+    if v.get("heartbleed"):
+        vuln_hits.append("Heartbleed")
+        result.add_finding(Severity.HIGH, "Vulnerable to Heartbleed (CVE-2014-0160)",
+                           "Upgrade OpenSSL and replace the certificate/keys.",
+                           code="tls.heartbleed")
+    if v.get("robot"):
+        rb = v["robot"]
+        if rb.startswith("VULNERABLE"):
+            vuln_hits.append("ROBOT")
+            result.add_finding(Severity.HIGH, "Vulnerable to ROBOT",
+                               "Disable RSA key-exchange cipher suites / patch the TLS stack.",
+                               code="tls.robot")
+    if v.get("ccs_injection"):
+        vuln_hits.append("CCS injection")
+        result.add_finding(Severity.HIGH, "Vulnerable to OpenSSL CCS injection (CVE-2014-0224)",
+                           "Upgrade OpenSSL to a fixed version.",
+                           code="tls.ccs_injection")
+    if v.get("secure_renegotiation") is False:
+        vuln_hits.append("insecure renegotiation")
+        result.add_finding(Severity.MEDIUM, "Secure renegotiation is not supported",
+                           "Enable RFC 5746 secure renegotiation in the TLS stack.",
+                           code="tls.insecure_reneg")
+    if v.get("compression"):
+        vuln_hits.append("TLS compression (CRIME)")
+        result.add_finding(Severity.MEDIUM, "TLS compression is enabled (CRIME risk)",
+                           "Disable TLS-level compression.",
+                           code="tls.compression")
+    result.add_check("tls_vulns", "No known TLS vulnerabilities",
+                     Status.OK if not vuln_hits else Status.FAIL,
+                     "" if not vuln_hits else ", ".join(vuln_hits))
+
+    # Weak key / SHA-1 chain
+    cert = deep.get("cert", {})
+    if cert.get("key_type") == "RSA" and cert.get("key_size") and cert["key_size"] < 2048:
+        result.add_finding(Severity.HIGH, f"Weak certificate key ({cert['key_size']}-bit RSA)",
+                           "Reissue the certificate with a 2048-bit+ RSA or an EC key.",
+                           code="tls.weak_key")
+    if cert.get("sha1_in_chain"):
+        result.add_finding(Severity.MEDIUM, "Certificate chain uses a SHA-1 signature",
+                           "Reissue with a SHA-256 (or stronger) signature chain.",
+                           code="tls.sha1_cert")
+
+
+def run_deep(host: str) -> ModuleResult:
+    """On-demand deep TLS assessment (SSLyze). Slower than run(); used by the
+    dedicated 'Deep TLS' tab so the main scan stays fast."""
+    result = ModuleResult(name="tls")
+    try:
+        from scanner.tls import deep as _deep
+        deep = _deep.deep_scan(host)
+    except Exception:
+        deep = None
+
+    if not deep:
+        result.add_check("tls_deep", "Deep TLS assessment", Status.WARN, "unavailable")
+        result.error = ("Could not complete the deep TLS assessment — the host could "
+                        "not be reached on port 443, or TLS analysis is unavailable.")
+        return result
+
+    _populate_deep(result, deep)
+    return result
