@@ -155,5 +155,15 @@ def ads_txt() -> FileResponse:
     return FileResponse(_STATIC / "ads.txt", media_type="text/plain")
 
 
+@app.get("/robots.txt")
+def robots_txt() -> FileResponse:
+    return FileResponse(_STATIC / "robots.txt", media_type="text/plain")
+
+
+@app.get("/sitemap.xml")
+def sitemap_xml() -> FileResponse:
+    return FileResponse(_STATIC / "sitemap.xml", media_type="application/xml")
+
+
 # Serve any other static assets (currently just index.html lives here).
 app.mount("/static", StaticFiles(directory=str(_STATIC)), name="static")
