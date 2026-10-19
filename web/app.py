@@ -27,6 +27,7 @@ from pydantic import BaseModel
 from scanner.engine import scan
 from scanner.utils import normalize_target
 from scanner import remediation
+from scanner.tls import checker as tls_checker
 from scanner.email_headers import analyzer as header_analyzer
 from scanner.urlcheck import analyze as analyze_url
 from scanner.urlcheck import shot as url_shot
@@ -123,6 +124,22 @@ def api_url(req: UrlRequest) -> JSONResponse:
     return JSONResponse(payload)
 
 
+@app.post("/api/tls-deep")
+def api_tls_deep(req: ScanRequest) -> JSONResponse:
+    """Run the slower, SSL-Labs-style deep TLS assessment on demand."""
+    try:
+        host = normalize_target(req.target)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    mod = tls_checker.run_deep(host)
+    payload = mod.to_dict()
+    payload["target"] = host
+    payload["remediation"] = remediation.build_plan(mod.findings)
+    payload["scanned_at"] = _stamp()
+    return JSONResponse(payload)
+
+
 @app.get("/api/report.pdf")
 def api_report(target: str = Query(..., description="Domain to report on")):
     try:
@@ -148,6 +165,11 @@ def index() -> FileResponse:
 @app.get("/privacy")
 def privacy() -> FileResponse:
     return FileResponse(_STATIC / "privacy.html")
+
+
+@app.get("/el")
+def index_el() -> FileResponse:
+    return FileResponse(_STATIC / "el.html")
 
 
 @app.get("/ads.txt")
