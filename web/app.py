@@ -172,6 +172,11 @@ def index_el() -> FileResponse:
     return FileResponse(_STATIC / "el.html")
 
 
+@app.get("/contact")
+def contact() -> FileResponse:
+    return FileResponse(_STATIC / "contact.html")
+
+
 @app.get("/ads.txt")
 def ads_txt() -> FileResponse:
     return FileResponse(_STATIC / "ads.txt", media_type="text/plain")
