@@ -74,7 +74,7 @@ def _rate_ok(client: str) -> bool:
 
 @app.get("/api/health")
 def health() -> Dict[str, Any]:
-    return {"status": "ok", "version": "0.1"}
+    return {"status": "ok"}
 
 
 @app.post("/api/scan")
@@ -143,6 +143,16 @@ def api_report(target: str = Query(..., description="Domain to report on")):
 @app.get("/")
 def index() -> FileResponse:
     return FileResponse(_STATIC / "index.html")
+
+
+@app.get("/privacy")
+def privacy() -> FileResponse:
+    return FileResponse(_STATIC / "privacy.html")
+
+
+@app.get("/ads.txt")
+def ads_txt() -> FileResponse:
+    return FileResponse(_STATIC / "ads.txt", media_type="text/plain")
 
 
 # Serve any other static assets (currently just index.html lives here).
