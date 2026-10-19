@@ -204,6 +204,22 @@
   .badge.warn{color:var(--medium)} .badge.info{color:var(--muted)}
   .row .label{flex:1;min-width:120px}
   .row .detail{color:var(--muted);font-size:12.5px;flex:1;text-align:right;word-break:break-word}
+  .tlsdeep{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 16px 10px;margin-top:10px}
+  .tlsdeep .ghead{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  .tlsdeep .tlsgrade{font:800 26px/1 -apple-system,Segoe UI,sans-serif;width:64px;height:64px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 auto}
+  .tlsdeep .gA{background:var(--ok)} .tlsdeep .gB{background:#2e8bb0}
+  .tlsdeep .gC{background:var(--medium)} .tlsdeep .gF{background:var(--high)}
+  .tlsdeep .gmeta{font-size:13px;color:var(--muted)}
+  .tlsdeep .gmeta b{color:var(--ink)}
+  .tlsdeep h4{margin:12px 0 6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .tlsdeep .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .tlsdeep .chip{font-size:12px;font-weight:600;padding:4px 9px;border-radius:999px;border:1px solid var(--line)}
+  .tlsdeep .chip.good{background:#e8f5ee;color:var(--ok);border-color:#bfe3cd}
+  .tlsdeep .chip.bad{background:#fcebe9;color:var(--high);border-color:#f3c7c1}
+  .tlsdeep .chip.off{color:var(--muted)}
+  .tlsdeep .kv{font-size:13px;margin:3px 0}
+  .tlsdeep .vl{display:flex;flex-wrap:wrap;gap:4px 14px}
+  .tlsdeep .vok{color:var(--ok);font-size:13px} .tlsdeep .vbad{color:var(--high);font-size:13px;font-weight:600}
   .rem{background:var(--card);border:1px solid var(--line);border-radius:12px;
     padding:0;margin-bottom:10px;overflow:hidden}
   .rem .head{display:flex;justify-content:space-between;gap:12px;align-items:center;
@@ -280,6 +296,7 @@
     </div>
     <div class="tabs">
       <button class="tab active" data-tab="scan">Website scan</button>
+      <button class="tab" data-tab="tls">Deep TLS</button>
       <button class="tab" data-tab="url">URL check</button>
       <button class="tab" data-tab="headers">Email headers</button>
       <button class="tab" data-tab="tools">Tools</button>
@@ -291,6 +308,14 @@
         <button id="go" type="submit">Scan</button>
       </form>
       <div class="note">Only scan websites you own or are authorised to test.</div>
+    </div>
+
+    <div id="tab-tls" hidden>
+      <form class="searchbar" id="tform">
+        <input id="tlshost" placeholder="Enter a website for a deep TLS/SSL test, e.g. example.com" autocomplete="off">
+        <button id="tgo" type="submit">Deep scan</button>
+      </form>
+      <div class="note">A thorough SSL-Labs-style test: protocols, cipher suites, forward secrecy, certificate details and known vulnerabilities, with an overall grade. Takes a little longer than the quick scan.</div>
     </div>
 
     <div id="tab-url" hidden>
@@ -411,12 +436,57 @@ function render(d){
         <span class="detail">${esc(c.detail||'')}</span></div>`;
     }
     html += '</div>';
+    if(key==='tls' && m.data && m.data.deep){ html += tlsDeepPanel(m.data.deep); }
   }
   html += remCards(d.remediation||[]);
   html += CTA_OWN + AD_SLOT('results');
   results.innerHTML = html; results.classList.remove('hidden');
 }
 
+function tlsGradeClass(g){
+  if(g==='A+'||g==='A') return 'gA';
+  if(g==='B') return 'gB';
+  if(g==='C'||g==='D') return 'gC';
+  return 'gF';
+}
+function tlsDeepPanel(d){
+  const gc = tlsGradeClass(d.grade||'F');
+  const protos = (d.protocols||[]).map(p=>{
+    const good = (p.name==='TLS 1.2'||p.name==='TLS 1.3');
+    const cls = !p.enabled ? 'off' : (good?'good':'bad');
+    return `<span class="chip ${cls}">${esc(p.name)} ${p.enabled?'✓':'✕'}</span>`;
+  }).join('');
+  const cert = d.cert||{};
+  const keyLine = [cert.key_type, cert.key_size?cert.key_size+'-bit':null].filter(Boolean).join(' ');
+  const fsLabel = {all:'Yes — all suites',partial:'Partial',none:'No',unknown:'—'}[d.forward_secrecy]||'—';
+  const v = d.vulns||{};
+  const vrow = (name,bad)=>`<span class="${bad?'vbad':'vok'}">${bad?'✕':'✓'} ${esc(name)}</span>`;
+  const vulns = [
+    vrow('Heartbleed', v.heartbleed===true),
+    vrow('ROBOT', String(v.robot||'').startsWith('VULNERABLE')),
+    vrow('CCS injection', v.ccs_injection===true),
+    vrow('Secure renegotiation', v.secure_renegotiation===false),
+    vrow('TLS compression (CRIME)', v.compression===true),
+  ].join('');
+  const weak = (d.weak_ciphers&&d.weak_ciphers.length)
+    ? `<div class="kv vbad">✕ Weak ciphers: ${esc(d.weak_ciphers.slice(0,6).join(', '))}${d.weak_ciphers.length>6?'…':''}</div>`
+    : `<div class="kv vok">✓ No weak cipher suites</div>`;
+  const sans = (cert.sans&&cert.sans.length)?` · ${cert.sans.length} SAN${cert.sans.length>1?'s':''}`:'';
+  return `<div class="tlsdeep">
+    <div class="ghead">
+      <div class="tlsgrade ${gc}">${esc(d.grade||'?')}</div>
+      <div class="gmeta">Deep TLS assessment · SSLyze<br>
+        ${keyLine?`<b>Certificate:</b> ${esc(keyLine)}${cert.sig_alg?' · '+esc(String(cert.sig_alg).toUpperCase()):''}${sans}`:''}
+        ${cert.trusted===false?' · <span style="color:var(--high)">untrusted chain</span>':''}</div>
+    </div>
+    <h4>Protocols</h4><div class="chips">${protos}</div>
+    <h4>Hardening</h4>
+    <div class="kv"><b>Forward secrecy:</b> ${esc(fsLabel)}</div>
+    ${weak}
+    <h4>Vulnerabilities</h4><div class="vl">${vulns}</div>
+    <div class="kv" style="color:var(--muted);font-size:11px;margin-top:8px">✓ = not vulnerable / supported · ✕ = problem found</div>
+  </div>`;
+}
 function remCards(plan){
   let html = `<h2 class="sec">Remediation plan</h2>`;
   if(!plan.length) return html + `<div class="allclear">No issues found — nothing to remediate. Well done.</div>`;
@@ -650,7 +720,6 @@ const TOOLS = {
  "Free online checks (no download)":[
   ["Have I Been Pwned","Check if your email/password appeared in a data breach.","Web",true,"https://haveibeenpwned.com/"],
   ["Mozilla HTTP Observatory","Grade your website's security headers for free.","Web",true,"https://developer.mozilla.org/en-US/observatory"],
-  ["Qualys SSL Labs","The deep-dive TLS/SSL test for any website.","Web",true,"https://www.ssllabs.com/ssltest/"],
  ],
 };
 let toolsBuilt = false;
@@ -687,6 +756,40 @@ function buildTools(){
   toolsBox.innerHTML = html;
 }
 
+/* ================= Deep TLS tab ================= */
+const tform = $('tform'), tgoBtn = $('tgo');
+function renderDeep(m){
+  let html = `<h2 class="sec">Deep TLS assessment</h2>`;
+  if(m.error && (!m.data || !m.data.deep)){
+    html += `<div class="checks"><div class="row"><span class="badge warn">n/a</span>
+      <span class="label">${esc(m.error)}</span></div></div>`;
+    results.innerHTML = html; results.classList.remove('hidden'); return;
+  }
+  if(m.data && m.data.deep){ html += tlsDeepPanel(m.data.deep); }
+  html += '<div class="checks">';
+  for(const c of (m.checks||[])){
+    html += `<div class="row"><span class="badge ${c.status}">${BADGE[c.status]||''}</span>
+      <span class="label">${esc(c.label)}</span>
+      <span class="detail">${esc(c.detail||'')}</span></div>`;
+  }
+  html += '</div>';
+  html += remCards(m.remediation||[]);
+  results.innerHTML = html; results.classList.remove('hidden');
+}
+tform.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const target = $('tlshost').value.trim();
+  if(!target) return;
+  showLoading('Running deep TLS scan', target); tgoBtn.disabled = true; tgoBtn.textContent='Scanning…';
+  try{
+    const r = await fetch('/api/tls-deep', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({target})});
+    if(!r.ok){ const j = await r.json().catch(()=>({detail:r.statusText})); throw new Error(j.detail||'Deep TLS scan failed'); }
+    renderDeep(await r.json());
+  }catch(err){ showError('Could not complete the deep TLS scan: ' + err.message); }
+  finally{ loading.classList.add('hidden'); tgoBtn.disabled=false; tgoBtn.textContent='Deep scan'; }
+});
+
 /* ================= Tabs ================= */
 document.querySelectorAll('.tab').forEach(t=>{
   t.addEventListener('click',()=>{
@@ -694,6 +797,7 @@ document.querySelectorAll('.tab').forEach(t=>{
     t.classList.add('active');
     const which = t.dataset.tab;
     $('tab-scan').hidden = which!=='scan';
+    $('tab-tls').hidden = which!=='tls';
     $('tab-url').hidden = which!=='url';
     $('tab-headers').hidden = which!=='headers';
     $('tab-tools').hidden = which!=='tools';
