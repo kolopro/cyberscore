@@ -193,6 +193,104 @@ CATALOG: Dict[str, Dict[str, Any]] = {
         ],
         "refs": ["https://ssl-config.mozilla.org/"],
     },
+    "tls.weak_protocol": {
+        "why": "SSL 2.0/3.0 are broken and enable attacks like POODLE; any support "
+               "for them undermines the whole site.",
+        "effort": "Low",
+        "steps": [
+            "Disable SSL 2.0 and SSL 3.0 in the server/CDN configuration.",
+            "Allow only TLS 1.2 and TLS 1.3.",
+            "Re-test to confirm SSL handshakes now fail.",
+        ],
+        "refs": ["https://ssl-config.mozilla.org/"],
+    },
+    "tls.no_forward_secrecy": {
+        "why": "Without forward secrecy, if the server key is ever compromised, past "
+               "recorded traffic can be decrypted.",
+        "effort": "Low",
+        "steps": [
+            "Prefer ECDHE (or DHE) key-exchange cipher suites.",
+            "Use Mozilla's 'intermediate' or 'modern' config generator.",
+        ],
+        "refs": ["https://ssl-config.mozilla.org/"],
+    },
+    "tls.weak_cipher": {
+        "why": "RC4, 3DES, NULL, EXPORT and anonymous ciphers are weak or broken and "
+               "weaken every connection that negotiates them.",
+        "effort": "Low",
+        "steps": [
+            "Remove RC4, 3DES, NULL, EXPORT and anonymous cipher suites.",
+            "Keep modern AEAD suites: AES-GCM and ChaCha20-Poly1305.",
+        ],
+        "refs": ["https://ssl-config.mozilla.org/"],
+    },
+    "tls.heartbleed": {
+        "why": "Heartbleed lets attackers read server memory, including private keys "
+               "and session data.",
+        "effort": "Medium",
+        "steps": [
+            "Upgrade OpenSSL to a patched version immediately.",
+            "Reissue the certificate and rotate the private key.",
+            "Revoke the old certificate.",
+        ],
+        "refs": ["https://heartbleed.com/"],
+    },
+    "tls.robot": {
+        "why": "ROBOT allows decrypting RSA-encrypted TLS traffic or forging "
+               "signatures.",
+        "effort": "Medium",
+        "steps": [
+            "Disable RSA key-exchange (static RSA) cipher suites.",
+            "Patch/upgrade the TLS termination stack.",
+        ],
+        "refs": ["https://robotattack.org/"],
+    },
+    "tls.ccs_injection": {
+        "why": "CCS injection (CVE-2014-0224) lets a man-in-the-middle force weak "
+               "keys on a session.",
+        "effort": "Medium",
+        "steps": [
+            "Upgrade OpenSSL to a fixed version.",
+        ],
+        "refs": [],
+    },
+    "tls.insecure_reneg": {
+        "why": "Without secure renegotiation (RFC 5746) a man-in-the-middle can "
+               "inject data into a session.",
+        "effort": "Low",
+        "steps": [
+            "Enable secure renegotiation in the TLS stack / upgrade it.",
+        ],
+        "refs": [],
+    },
+    "tls.compression": {
+        "why": "TLS-level compression enables the CRIME attack, which can recover "
+               "secrets such as cookies.",
+        "effort": "Low",
+        "steps": [
+            "Disable TLS compression in the server/CDN.",
+        ],
+        "refs": [],
+    },
+    "tls.weak_key": {
+        "why": "An RSA key under 2048 bits is too weak against modern factoring "
+               "attacks.",
+        "effort": "Medium",
+        "steps": [
+            "Reissue the certificate with a 2048-bit+ RSA key, or an EC key (P-256).",
+            "Deploy the new certificate and revoke the old one.",
+        ],
+        "refs": ["https://ssl-config.mozilla.org/"],
+    },
+    "tls.sha1_cert": {
+        "why": "SHA-1 signatures are considered insecure and are distrusted by "
+               "browsers.",
+        "effort": "Medium",
+        "steps": [
+            "Reissue the certificate chain with SHA-256 or stronger signatures.",
+        ],
+        "refs": [],
+    },
     # --- DNS ----------------------------------------------------------------
     "dns.no_a": {
         "why": "Without an A record the host does not resolve over IPv4 and is "
