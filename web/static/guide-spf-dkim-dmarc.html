@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stop Email Spoofing: SPF, DKIM &amp; DMARC Explained · CyberScore</title>
+<meta name="description" content="How SPF, DKIM and DMARC stop attackers spoofing your domain and improve email deliverability — what each record does, example values, and a safe rollout from p=none to p=reject.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cyberscore.cc/guides/spf-dkim-dmarc">
+<meta property="og:title" content="Stop Email Spoofing: SPF, DKIM &amp; DMARC Explained">
+<meta property="og:description" content="The three DNS records that prove your mail is really yours and stop phishing sent from your domain.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cyberscore.cc/guides/spf-dkim-dmarc">
+<meta property="og:image" content="https://cyberscore.cc/static/img/og.png">
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2727863150599775" crossorigin="anonymous"></script>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
+<style>
+  :root{
+    --ink:#1f2933; --muted:#616e7c; --line:#dfe4e8; --bg:#eef1f4;
+    --card:#ffffff; --navy1:#273244; --navy2:#161c27; --teal:#f59e0b; --teal-lo:#a9700a; --low:#2471a3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:linear-gradient(160deg,var(--navy1),var(--navy2));color:#eafcff;padding:26px 20px 34px}
+  header .wrap{max-width:760px;margin:0 auto}
+  header a.home{color:#bfe3ea;text-decoration:none;font-size:13px;font-weight:600}
+  header a.home:hover{text-decoration:underline}
+  header .kicker{display:block;margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffc247}
+  header h1{margin:6px 0 0;font-size:28px;line-height:1.25;letter-spacing:.2px}
+  header .sub{color:#cfd8e2;margin:10px 0 0;font-size:15px}
+  main{max-width:760px;margin:24px auto 0;padding:0 20px 50px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 34px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  article h2{font-size:20px;color:var(--navy2);margin:30px 0 8px}
+  article h2:first-of-type{margin-top:4px}
+  article h3{font-size:16px;color:var(--navy2);margin:22px 0 4px}
+  p,li{color:#333}
+  a{color:var(--low)}
+  ul,ol{padding-left:22px;margin:8px 0}
+  li{margin:5px 0}
+  code{background:#f1f4f7;border:1px solid #e2e8ee;border-radius:5px;padding:1px 5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:#0b3a53;word-break:break-word}
+  pre{background:#161c27;color:#e6edf3;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px;line-height:1.55;margin:10px 0}
+  pre code{background:none;border:0;color:inherit;padding:0}
+  .tldr{background:#fff8ec;border:1px solid #f3d9a6;border-radius:10px;padding:14px 18px;margin:0 0 20px}
+  .tldr b{color:#8a5a0c}
+  .note{background:#f3f7fa;border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:8px;padding:12px 16px;font-size:14.5px;color:#2c3a46;margin:14px 0}
+  .cta-scan{display:block;text-align:center;background:var(--teal);color:#fff;font-weight:800;text-decoration:none;padding:15px;border-radius:12px;margin:26px 0 0}
+  .cta-scan:hover{filter:brightness(1.07)}
+  .related{margin:26px 0 0;border-top:1px solid var(--line);padding-top:14px}
+  .related b{color:var(--navy2)}
+  .related a{display:block;margin:6px 0;font-weight:600}
+  footer{max-width:760px;margin:0 auto;padding:14px 20px 40px;color:var(--muted);font-size:12px;text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="home" href="/guides">← All guides</a>
+    <span class="kicker">Email authentication</span>
+    <h1>Stop email spoofing: SPF, DKIM &amp; DMARC</h1>
+    <p class="sub">Without these three DNS records, anyone can send email that looks like it came from your
+      domain. Here's what each does and how to set them up safely.</p>
+  </div>
+</header>
+
+<main>
+<article class="card">
+  <div class="tldr"><b>In short:</b> <b>SPF</b> lists which servers may send mail for your domain, <b>DKIM</b>
+    cryptographically signs your messages, and <b>DMARC</b> ties the two together and tells receivers what to
+    do with mail that fails — plus sends you reports. Together they stop spoofing and improve deliverability.</div>
+
+  <!-- AD UNIT: paste your AdSense in-article unit here after turning Auto ads OFF -->
+
+  <h2>The problem: anyone can forge "From"</h2>
+  <p>The <code>From:</code> address on an email is as easy to fake as the return address on a paper envelope.
+    Without authentication, a scammer can send phishing that appears to come from
+    <code>you@yourcompany.com</code> — damaging your brand and landing your legitimate mail in spam. SPF, DKIM
+    and DMARC are the three DNS records that fix this, and all live as TXT records at your DNS provider.</p>
+
+  <h2>SPF — who is allowed to send</h2>
+  <p>Sender Policy Framework publishes the list of servers permitted to send mail for your domain. A receiver
+    checks whether the sending server is on that list. A typical record for a domain using Google Workspace:</p>
+  <pre><code>v=spf1 include:_spf.google.com ~all</code></pre>
+  <p>Add an <code>include:</code> for every service that sends on your behalf (your mail host, newsletter tool,
+    CRM, etc.). End with <code>~all</code> (soft-fail) while testing, then <code>-all</code> (hard-fail) once
+    you are confident.</p>
+  <div class="note">SPF allows at most <b>10 DNS lookups</b>. Too many <code>include:</code> entries breaks it
+    silently — consolidate senders or use an SPF-flattening service if you hit the limit.</div>
+
+  <h2>DKIM — a signature on every message</h2>
+  <p>DomainKeys Identified Mail adds a cryptographic signature to the headers of each message you send. Your
+    mail provider holds a private key; the matching public key is published in your DNS as a TXT record at a
+    selector, e.g. <code>selector._domainkey.yourdomain.com</code>. The receiver fetches the public key and
+    verifies the signature, proving the message really came from you and was not altered in transit. Most
+    providers (Google, Microsoft 365, etc.) generate the key and give you the record to paste — you just
+    enable it and publish.</p>
+
+  <h2>DMARC — the policy that ties it together</h2>
+  <p>DMARC tells receivers what to do when a message fails SPF <em>and</em> DKIM, and asks them to send you
+    reports. It is published at <code>_dmarc.yourdomain.com</code>:</p>
+  <pre><code>v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com; fo=1</code></pre>
+  <p>The <code>p=</code> policy is the key part:</p>
+  <ul>
+    <li><code>p=none</code> — monitor only; collect reports, change nothing. Start here.</li>
+    <li><code>p=quarantine</code> — failing mail goes to spam/junk.</li>
+    <li><code>p=reject</code> — failing mail is refused outright. The end goal.</li>
+  </ul>
+  <p>The <code>rua=</code> address receives daily aggregate reports so you can see who is sending as your
+    domain before you tighten the policy.</p>
+
+  <h2>Alignment — the detail that catches people out</h2>
+  <p>DMARC passes only when SPF or DKIM not only passes but is <b>aligned</b> — the domain it authenticated
+    matches the domain in the visible <code>From:</code> address. A common surprise is mail sent through a
+    third-party tool that passes SPF for <em>its</em> domain, not yours; DKIM signing with your own domain is
+    the reliable way to stay aligned.</p>
+
+  <h2>A safe rollout</h2>
+  <ol>
+    <li>Publish <b>SPF</b> listing all your senders (end with <code>~all</code>).</li>
+    <li>Enable <b>DKIM</b> at each sending service and publish the public keys.</li>
+    <li>Publish <b>DMARC</b> at <code>p=none</code> with a <code>rua</code> address.</li>
+    <li>Read the reports for a few weeks; fix any legitimate sender that fails.</li>
+    <li>Move to <code>p=quarantine</code>, then — once clean — to <code>p=reject</code>.</li>
+  </ol>
+
+  <h2>Common mistakes</h2>
+  <ul>
+    <li>SPF with more than 10 DNS lookups (silently fails).</li>
+    <li>Two SPF records on one domain — there must be exactly one.</li>
+    <li>DMARC left at <code>p=none</code> forever, so spoofing is still delivered.</li>
+    <li>Forgetting a sender (newsletter, invoicing tool) when moving to <code>-all</code>/<code>reject</code>.</li>
+  </ul>
+
+  <h2>Check your domain &amp; read raw headers</h2>
+  <p>CyberScore's Website scan reports your SPF, DKIM and DMARC status, and the <b>Email headers</b> tab lets
+    you paste a raw message to see exactly how SPF/DKIM/DMARC evaluated and which server really sent it —
+    handy for diagnosing a suspicious email.</p>
+  <a class="cta-scan" href="/">Check your email security →</a>
+
+  <div class="related">
+    <b>Related guides</b>
+    <a href="/guides/http-security-headers">HTTP security headers explained →</a>
+    <a href="/guides/tls-ssl-explained">TLS &amp; SSL explained →</a>
+  </div>
+</article>
+</main>
+
+<footer>CyberScore · cyberscore.cc · powered by VortiSec · <a href="/privacy">Privacy</a> · <a href="/contact">Contact</a></footer>
+</body>
+</html>

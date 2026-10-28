@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HTTP Security Headers Explained (HSTS, CSP &amp; more) · CyberScore</title>
+<meta name="description" content="A practical guide to HTTP security headers — HSTS, Content-Security-Policy, X-Content-Type-Options, X-Frame-Options, Referrer-Policy and Permissions-Policy — with copy-paste Nginx, Apache and Caddy examples.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cyberscore.cc/guides/http-security-headers">
+<meta property="og:title" content="HTTP Security Headers Explained">
+<meta property="og:description" content="What HSTS, CSP, X-Frame-Options and the other security headers do, and how to add them to your server.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cyberscore.cc/guides/http-security-headers">
+<meta property="og:image" content="https://cyberscore.cc/static/img/og.png">
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2727863150599775" crossorigin="anonymous"></script>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
+<style>
+  :root{
+    --ink:#1f2933; --muted:#616e7c; --line:#dfe4e8; --bg:#eef1f4;
+    --card:#ffffff; --navy1:#273244; --navy2:#161c27; --teal:#f59e0b; --teal-lo:#a9700a; --low:#2471a3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:linear-gradient(160deg,var(--navy1),var(--navy2));color:#eafcff;padding:26px 20px 34px}
+  header .wrap{max-width:760px;margin:0 auto}
+  header a.home{color:#bfe3ea;text-decoration:none;font-size:13px;font-weight:600}
+  header a.home:hover{text-decoration:underline}
+  header .kicker{display:block;margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffc247}
+  header h1{margin:6px 0 0;font-size:28px;line-height:1.25;letter-spacing:.2px}
+  header .sub{color:#cfd8e2;margin:10px 0 0;font-size:15px}
+  main{max-width:760px;margin:24px auto 0;padding:0 20px 50px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 34px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  article h2{font-size:20px;color:var(--navy2);margin:30px 0 8px}
+  article h2:first-of-type{margin-top:4px}
+  article h3{font-size:16px;color:var(--navy2);margin:22px 0 4px}
+  p,li{color:#333}
+  a{color:var(--low)}
+  ul,ol{padding-left:22px;margin:8px 0}
+  li{margin:5px 0}
+  code{background:#f1f4f7;border:1px solid #e2e8ee;border-radius:5px;padding:1px 5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:#0b3a53;word-break:break-word}
+  pre{background:#161c27;color:#e6edf3;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px;line-height:1.55;margin:10px 0}
+  pre code{background:none;border:0;color:inherit;padding:0}
+  .tldr{background:#fff8ec;border:1px solid #f3d9a6;border-radius:10px;padding:14px 18px;margin:0 0 20px}
+  .tldr b{color:#8a5a0c}
+  .note{background:#f3f7fa;border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:8px;padding:12px 16px;font-size:14.5px;color:#2c3a46;margin:14px 0}
+  .cta-scan{display:block;text-align:center;background:var(--teal);color:#fff;font-weight:800;text-decoration:none;padding:15px;border-radius:12px;margin:26px 0 0}
+  .cta-scan:hover{filter:brightness(1.07)}
+  .related{margin:26px 0 0;border-top:1px solid var(--line);padding-top:14px}
+  .related b{color:var(--navy2)}
+  .related a{display:block;margin:6px 0;font-weight:600}
+  footer{max-width:760px;margin:0 auto;padding:14px 20px 40px;color:var(--muted);font-size:12px;text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="home" href="/guides">← All guides</a>
+    <span class="kicker">Web · Security headers</span>
+    <h1>HTTP security headers explained</h1>
+    <p class="sub">The response headers that force HTTPS, block injected scripts and stop clickjacking — and
+      how to add them to Nginx, Apache or Caddy.</p>
+  </div>
+</header>
+
+<main>
+<article class="card">
+  <div class="tldr"><b>In short:</b> security headers are small instructions your server sends with every
+    page that tell the browser how to behave more safely. Adding six of them — HSTS, Content-Security-Policy,
+    X-Content-Type-Options, X-Frame-Options, Referrer-Policy and Permissions-Policy — closes off some of the
+    most common web attacks, often in a few lines of server config.</div>
+
+  <!-- AD UNIT: paste your AdSense in-article unit here after turning Auto ads OFF -->
+
+  <h2>What are HTTP security headers?</h2>
+  <p>Every time someone opens a page on your site, your server sends back the page <em>and</em> a set of HTTP
+    response headers — metadata the browser reads before it renders anything. Security headers are a subset of
+    those: directives that tell the browser to enforce HTTPS, refuse to run untrusted scripts, or stop your
+    pages being embedded in someone else's site. They cost nothing to serve, work in every modern browser, and
+    are one of the highest-impact, lowest-effort improvements you can make. CyberScore checks six of them.</p>
+
+  <h2>Strict-Transport-Security (HSTS)</h2>
+  <p>HSTS tells the browser: "from now on, only ever talk to this domain over HTTPS." Once a browser has seen
+    the header, it refuses plain-HTTP connections automatically, which defeats downgrade and
+    man-in-the-middle attacks that rely on that first insecure request.</p>
+  <pre><code>Strict-Transport-Security: max-age=63072000; includeSubDomains; preload</code></pre>
+  <p><code>max-age</code> is in seconds (two years above). Add <code>includeSubDomains</code> only when every
+    subdomain is HTTPS-ready, and <code>preload</code> if you intend to submit your domain to the browser
+    preload list.</p>
+  <div class="note">Only send HSTS over HTTPS, and be sure HTTPS works everywhere first — once a browser caches
+    a long <code>max-age</code>, you cannot easily undo it if something is still on HTTP.</div>
+
+  <h2>Content-Security-Policy (CSP)</h2>
+  <p>CSP is the most powerful — and most fiddly — header. It lists exactly which sources of scripts, styles,
+    images and so on the browser is allowed to load, which is the single best defence against cross-site
+    scripting (XSS). A strict starting point:</p>
+  <pre><code>Content-Security-Policy: default-src 'self'; img-src 'self' data:; object-src 'none'; frame-ancestors 'self'; base-uri 'self'</code></pre>
+  <p>Because a too-strict policy can break a working site, roll it out in report-only mode first and watch what
+    it would have blocked:</p>
+  <pre><code>Content-Security-Policy-Report-Only: default-src 'self'</code></pre>
+  <p>Tighten it until nothing legitimate is reported, then switch to the enforcing header. Avoid
+    <code>'unsafe-inline'</code> for scripts where you can — it removes most of CSP's protection.</p>
+
+  <h2>X-Content-Type-Options</h2>
+  <p>One fixed value stops browsers from "sniffing" a file's type and, for example, running an uploaded image
+    as JavaScript:</p>
+  <pre><code>X-Content-Type-Options: nosniff</code></pre>
+
+  <h2>X-Frame-Options</h2>
+  <p>This stops other sites embedding your pages in an <code>&lt;iframe&gt;</code> to trick users into clicking
+    hidden buttons (clickjacking):</p>
+  <pre><code>X-Frame-Options: SAMEORIGIN</code></pre>
+  <p>The modern equivalent is CSP's <code>frame-ancestors 'self'</code>; sending both covers older and newer
+    browsers.</p>
+
+  <h2>Referrer-Policy</h2>
+  <p>Controls how much of the current URL is shared when a user clicks a link to another site — important if
+    your URLs contain tokens or private paths. A good balanced default:</p>
+  <pre><code>Referrer-Policy: strict-origin-when-cross-origin</code></pre>
+
+  <h2>Permissions-Policy</h2>
+  <p>Lets you switch off browser features your site does not use — camera, microphone, geolocation — so a
+    compromised script cannot silently request them:</p>
+  <pre><code>Permissions-Policy: camera=(), microphone=(), geolocation=()</code></pre>
+
+  <h2>How to add them to your server</h2>
+  <h3>Nginx</h3>
+  <pre><code>add_header Strict-Transport-Security "max-age=63072000; includeSubDomains" always;
+add_header X-Content-Type-Options "nosniff" always;
+add_header X-Frame-Options "SAMEORIGIN" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;</code></pre>
+  <h3>Apache (.htaccess or vhost)</h3>
+  <pre><code>Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+Header always set X-Content-Type-Options "nosniff"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"</code></pre>
+  <h3>Caddy</h3>
+  <pre><code>header {
+    Strict-Transport-Security "max-age=63072000; includeSubDomains"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "SAMEORIGIN"
+    Referrer-Policy "strict-origin-when-cross-origin"
+}</code></pre>
+
+  <h2>Common mistakes</h2>
+  <ul>
+    <li>Setting HSTS while part of the site is still served over HTTP.</li>
+    <li>A CSP so loose (<code>default-src *</code> or <code>'unsafe-inline'</code> everywhere) that it protects
+      nothing.</li>
+    <li>Forgetting <code>always</code> in Nginx, so headers are dropped on error pages.</li>
+    <li>Setting headers in the app <em>and</em> the proxy, producing conflicting duplicates.</li>
+  </ul>
+
+  <h2>Check your own headers</h2>
+  <p>Run your domain through CyberScore and you will see, in seconds, which of these six headers are present,
+    which are missing, and a prioritised plan to fix the gaps — plus a downloadable PDF report.</p>
+  <a class="cta-scan" href="/">Scan your website free →</a>
+
+  <div class="related">
+    <b>Related guides</b>
+    <a href="/guides/tls-ssl-explained">TLS &amp; SSL explained →</a>
+    <a href="/guides/spf-dkim-dmarc">Stop email spoofing: SPF, DKIM &amp; DMARC →</a>
+  </div>
+</article>
+</main>
+
+<footer>CyberScore · cyberscore.cc · powered by VortiSec · <a href="/privacy">Privacy</a> · <a href="/contact">Contact</a></footer>
+</body>
+</html>
