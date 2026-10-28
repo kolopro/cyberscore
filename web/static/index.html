@@ -510,7 +510,115 @@
   <div id="tools" class="hidden"></div>
 </main>
 
-<div class="wrap"><div class="ad-slot" data-ad="footer"></div></div>
+<section class="learn" id="learn">
+  <style>
+    .learn{background:var(--bg);padding:10px 20px 40px}
+    .learn-wrap{max-width:1000px;margin:0 auto}
+    .learn h2{font-size:22px;color:var(--navy2);margin:30px 0 6px;font-weight:800}
+    .learn .lead{color:var(--muted);font-size:15px;max-width:70ch;margin:0 0 20px}
+    .learn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+    .learn-grid article{background:var(--card);border:1px solid var(--line);border-radius:14px;
+      padding:20px 22px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+    .learn-grid h3{margin:0 0 7px;font-size:16px;color:var(--navy2)}
+    .learn-grid p{margin:0 0 12px;font-size:14px;line-height:1.6;color:#3a4652}
+    .learn-grid .glink{color:var(--teal-lo);font-weight:700;text-decoration:none;font-size:13.5px}
+    .learn-grid .glink:hover{text-decoration:underline}
+    .learn .faq{background:var(--card);border:1px solid var(--line);border-radius:14px;
+      padding:6px 24px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+    .learn .faq details{border-bottom:1px solid var(--line);padding:14px 0}
+    .learn .faq details:last-child{border-bottom:0}
+    .learn .faq summary{font-weight:700;color:var(--navy2);cursor:pointer;font-size:15px;list-style:none}
+    .learn .faq summary::-webkit-details-marker{display:none}
+    .learn .faq summary::before{content:'+ ';color:var(--teal-lo);font-weight:800}
+    .learn .faq details[open] summary::before{content:'– '}
+    .learn .faq p{margin:10px 0 2px;font-size:14px;line-height:1.65;color:#3a4652}
+    .learn .allguides{margin:18px 0 0}
+    .learn .allguides a{color:var(--teal-lo);font-weight:800;text-decoration:none}
+  </style>
+  <div class="learn-wrap">
+    <h2>Understand your website's security</h2>
+    <p class="lead">A CyberScore scan looks at the parts of your site attackers probe first. Here is what each
+      area means, why it matters, and the common mistakes — with an in-depth guide for each one.</p>
+
+    <div class="learn-grid">
+      <article>
+        <h3>HTTP security headers</h3>
+        <p>Response headers like HSTS, Content-Security-Policy and X-Frame-Options tell the browser how to
+          protect your visitors — forcing HTTPS, blocking injected scripts and stopping clickjacking. Missing
+          headers are the most common issue we find, and usually the quickest to fix.</p>
+        <a class="glink" href="/guides/http-security-headers">Read the guide →</a>
+      </article>
+      <article>
+        <h3>TLS / SSL &amp; certificates</h3>
+        <p>HTTPS is only as strong as the TLS configuration behind it. Old protocol versions, weak ciphers or a
+          certificate without forward secrecy can quietly undermine the padlock. Our Deep TLS tab grades your
+          setup the way SSL Labs does.</p>
+        <a class="glink" href="/guides/tls-ssl-explained">Read the guide →</a>
+      </article>
+      <article>
+        <h3>Email authentication (SPF, DKIM, DMARC)</h3>
+        <p>If your domain has no SPF, DKIM and DMARC records, anyone can spoof email "from" your business.
+          These three DNS records let receivers verify your mail and reject forgeries — essential for
+          deliverability and anti-phishing.</p>
+        <a class="glink" href="/guides/spf-dkim-dmarc">Read the guide →</a>
+      </article>
+      <article>
+        <h3>DNS &amp; domain hygiene</h3>
+        <p>Records such as CAA restrict who can issue certificates for your domain, and DNSSEC protects against
+          tampering. Small DNS details close off whole classes of attack before they start.</p>
+        <a class="glink" href="/guides">More guides →</a>
+      </article>
+      <article>
+        <h3>URL reputation &amp; safe browsing</h3>
+        <p>Before you click a suspicious link, CyberScore checks it against threat-intelligence sources and
+          renders a safe server-side preview — so you can judge a page without visiting it yourself.</p>
+        <a class="glink" href="/guides">More guides →</a>
+      </article>
+      <article>
+        <h3>Reading your report</h3>
+        <p>Your score out of 100, the letter grade and the High/Medium/Low counts are a quick health check. The
+          remediation plan then tells you exactly what to change, in priority order, with references.</p>
+        <a class="glink" href="/guides">More guides →</a>
+      </article>
+    </div>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details>
+        <summary>Is CyberScore free, and do I need an account?</summary>
+        <p>Yes — scanning is free and needs no signup. You type a domain or URL and get a graded report in
+          seconds. There is nothing to install.</p>
+      </details>
+      <details>
+        <summary>Is the scan safe and legal to run?</summary>
+        <p>CyberScore performs only <b>passive, non-invasive</b> checks: it reads HTTP headers, inspects the TLS
+          handshake and certificate, looks up public DNS records and public technology fingerprints. It never
+          attempts logins, exploits or intrusive probing. You should still only scan sites you own or are
+          authorised to test.</p>
+      </details>
+      <details>
+        <summary>What does the score out of 100 mean?</summary>
+        <p>It summarises how well the site follows current security best practices across all checked areas.
+          90+ is excellent, 80–89 good, 60–79 needs improvement, and below 60 is poor. The letter grade and the
+          severity counts give you the same picture at a glance.</p>
+      </details>
+      <details>
+        <summary>A check failed — how do I fix it?</summary>
+        <p>Every report ends with a prioritised remediation plan explaining why each issue matters and the exact
+          steps to fix it. The guides above go deeper on each topic. You can also download the full report as a
+          PDF to share with your developer or host.</p>
+      </details>
+      <details>
+        <summary>How often should I re-scan?</summary>
+        <p>Re-scan after any change to your server, certificate, DNS or hosting, and otherwise every few months.
+          Configurations drift over time, and certificates and protocols are updated regularly.</p>
+      </details>
+    </div>
+
+    <p class="allguides"><a href="/guides">Browse all security guides →</a></p>
+  </div>
+</section>
+
 <footer>
   <div class="foot-wrap">
     <div class="foot-brand">
@@ -518,6 +626,7 @@
       <span>cyberscore.cc · passive, non-invasive scanning</span>
     </div>
     <nav class="foot-links">
+      <a href="/guides">Guides</a>
       <a href="/privacy">Privacy Policy</a>
       <a href="/contact">Contact</a>
     </nav>
@@ -568,8 +677,21 @@ const CTA_OWN = `<div class="cta-own">
   <div class="cta-btns"><a class="cta-b primary" href="#pro">CyberScore Pro →</a>
   <a class="cta-b" href="#endpoint">Endpoint Management →</a></div>
 </div>`;
-/* Ad slot: invisible until you paste AdSense/Carbon code inside the matching div. */
-const AD_SLOT = (id)=>`<div class="ad-slot" data-ad="${id}"></div>`;
+/* AdSense — manual unit, shown ONLY on screens with real content (scan results).
+   Turn OFF "Auto ads" in the AdSense dashboard; paste your Display ad-unit slot id
+   (digits only) below. Empty id => nothing renders (keeps policy-clean). */
+const AD_CLIENT = 'ca-pub-2727863150599775';
+const AD_SLOT_ID = '';   // <-- paste AdSense Display ad-unit slot id here
+const AD_SLOT = (id)=> AD_SLOT_ID
+  ? `<ins class="adsbygoogle ad-unit" style="display:block;margin:18px 0" data-ad-client="${AD_CLIENT}" data-ad-slot="${AD_SLOT_ID}" data-ad-format="auto" data-full-width-responsive="true"></ins>`
+  : '';
+function pushAds(){
+  if(!AD_SLOT_ID) return;
+  try{
+    document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])')
+      .forEach(()=> (window.adsbygoogle = window.adsbygoogle || []).push({}));
+  }catch(e){}
+}
 
 /* ---- inline icons (CSP-safe, currentColor) ---- */
 const CHEV_ICON  = `<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -755,6 +877,7 @@ function render(d){
   /* 6 — own-product banner + ad slot (unchanged) */
   html += CTA_OWN + AD_SLOT('results');
   results.innerHTML = html; results.classList.remove('hidden');
+  pushAds();
 }
 
 function tlsGradeClass(g){
@@ -1021,7 +1144,6 @@ function buildTools(){
     </div></div>`;
   }
   html += `</div>`;
-  html += AD_SLOT('tools');
   for(const [cat,items] of Object.entries(TOOLS)){
     html += `<h2 class="sec">${esc(cat)}</h2><div class="grid">`;
     html += items.map(([nm,desc,os,free,url])=>{
