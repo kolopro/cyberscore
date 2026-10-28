@@ -188,7 +188,7 @@ def guide(slug: str) -> FileResponse:
     # slug is restricted to a safe charset, so no path traversal is possible.
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", slug):
         raise HTTPException(status_code=404, detail="Guide not found")
-    path = _STATIC / "guides" / f"{slug}.html"
+    path = _STATIC / f"guide-{slug}.html"
     if not path.is_file():
         raise HTTPException(status_code=404, detail="Guide not found")
     return FileResponse(path)
