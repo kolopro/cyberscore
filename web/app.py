@@ -15,6 +15,7 @@ so the CLI, this web app and a future SaaS all share one engine.
 from __future__ import annotations
 
 import datetime
+import re
 import time
 from pathlib import Path
 from typing import Any, Dict
@@ -175,6 +176,22 @@ def index_el() -> FileResponse:
 @app.get("/contact")
 def contact() -> FileResponse:
     return FileResponse(_STATIC / "contact.html")
+
+
+@app.get("/guides")
+def guides() -> FileResponse:
+    return FileResponse(_STATIC / "guides.html")
+
+
+@app.get("/guides/{slug}")
+def guide(slug: str) -> FileResponse:
+    # slug is restricted to a safe charset, so no path traversal is possible.
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", slug):
+        raise HTTPException(status_code=404, detail="Guide not found")
+    path = _STATIC / "guides" / f"{slug}.html"
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Guide not found")
+    return FileResponse(path)
 
 
 @app.get("/ads.txt")
