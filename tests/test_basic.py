@@ -263,5 +263,42 @@ class TestReputation(unittest.TestCase):
         self.assertEqual(a["host"], b["host"])
 
 
+class TestNetguard(unittest.TestCase):
+    def test_public_ips_allowed(self):
+        from scanner import netguard
+        for ip in ("8.8.8.8", "1.1.1.1", "38.45.81.177", "2606:4700:4700::1111"):
+            self.assertTrue(netguard.is_public_ip(ip), ip)
+
+    def test_internal_ips_blocked(self):
+        from scanner import netguard
+        for ip in ("127.0.0.1", "10.0.0.5", "172.17.0.2", "192.168.1.1",
+                   "169.254.169.254", "0.0.0.0", "::1", "fc00::1", "fe80::1"):
+            self.assertFalse(netguard.is_public_ip(ip), ip)
+
+    def test_ipv4_mapped_v6_blocked(self):
+        from scanner import netguard
+        self.assertFalse(netguard.is_public_ip("::ffff:127.0.0.1"))
+        self.assertFalse(netguard.is_public_ip("::ffff:10.0.0.1"))
+
+    def test_garbage_is_not_public(self):
+        from scanner import netguard
+        self.assertFalse(netguard.is_public_ip("not-an-ip"))
+
+    def test_literal_ip_host_resolves_to_itself(self):
+        from scanner import netguard
+        self.assertEqual(netguard.resolve_host("10.0.0.1"), ["10.0.0.1"])
+        self.assertFalse(netguard.host_is_public("127.0.0.1"))
+
+    def test_install_is_idempotent(self):
+        from scanner import netguard
+        from urllib3.util import connection
+        netguard.install()
+        first = connection.create_connection
+        netguard.install()
+        self.assertIs(connection.create_connection, first)
+        self.assertTrue(getattr(connection.create_connection,
+                                "_cyberscore_guard", False))
+
+
 if __name__ == "__main__":
     unittest.main()
