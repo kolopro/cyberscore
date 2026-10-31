@@ -14,12 +14,12 @@ from __future__ import annotations
 
 import ipaddress
 import re
-import socket
 from typing import List, Optional, Tuple
 from urllib.parse import urlsplit, unquote
 
 import requests
 
+from scanner import netguard
 from scanner.models import ModuleResult, Severity, Status
 
 # URL shorteners: they hide the real destination until you follow them.
@@ -76,18 +76,15 @@ def _is_ip_host(host: str) -> bool:
 
 
 def _resolve_public(host: str) -> Tuple[Optional[str], bool]:
-    """Resolve host → (ip, is_public). is_public False for private/loopback/etc."""
-    try:
-        if _is_ip_host(host):
-            ip = host.strip("[]")
-        else:
-            ip = socket.gethostbyname(host)
-        addr = ipaddress.ip_address(ip)
-        public = not (addr.is_private or addr.is_loopback or addr.is_link_local
-                      or addr.is_reserved or addr.is_multicast or addr.is_unspecified)
-        return ip, public
-    except (OSError, ValueError):
+    """Resolve host → (ip, is_public). is_public False for private/loopback/etc.
+
+    Delegates to the shared netguard so the "is this internal?" reporting here
+    uses exactly the same ranges the connect-time SSRF guard enforces.
+    """
+    ips = netguard.resolve_host(host)
+    if not ips:
         return None, False
+    return ips[0], netguard.host_is_public(host)
 
 
 def analyze(raw_url: str, fetch: bool = True) -> ModuleResult:
