@@ -236,6 +236,16 @@ def guides() -> FileResponse:
     return FileResponse(_STATIC / "guides.html")
 
 
+@app.get("/about")
+def about() -> FileResponse:
+    return FileResponse(_STATIC / "about.html")
+
+
+@app.get("/faq")
+def faq() -> FileResponse:
+    return FileResponse(_STATIC / "faq.html")
+
+
 @app.get("/guides/{slug}")
 def guide(slug: str) -> FileResponse:
     # slug is restricted to a safe charset, so no path traversal is possible.
