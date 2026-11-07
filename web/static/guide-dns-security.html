@@ -1,0 +1,174 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DNS Security: CAA Records, DNSSEC and What They Protect · CyberScore</title>
+<meta name="description" content="DNS is the phone book of the internet — and it has real security controls. Learn about CAA records, DNSSEC, and common DNS misconfigurations that attackers exploit.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cyberscore.cc/guides/dns-security">
+<meta property="og:title" content="DNS Security: CAA Records, DNSSEC and What They Protect">
+<meta property="og:description" content="CAA records, DNSSEC and common DNS misconfigurations — what they are, why they matter, and how to set them up.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cyberscore.cc/guides/dns-security">
+<meta property="og:image" content="https://cyberscore.cc/static/img/og.png">
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2727863150599775" crossorigin="anonymous"></script>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAHyElEQVR4nK2Xe2xX5RnHP897zvlde++vtBaZm1EzRN0KilTFOiayC+JlNl42mInZlBHNNpyTmckIxCxblGzihqjMoYCzEdHgdOIcCipu5aI4nFAKBcTWlrZSevud877P/mgLVdt62b7JSc4fJ8/3c85zeZ8jDKi62qOmxgKUTvjOuYo7z4mW4gAQPp/UGIOqtqno5pbatRsBN9hLBpsXjb90kmf8u1AuFM/zPqfp0CTOAlKrkbuzZfvaZwc8ZeAmUzHjGuP5KzGeURuCqv2koCJ9/Kr6yQQiRowviGBt9tbDW566m+pqTwCKz77iHE9ks6oKTi2CP5KpMQII2TBEVYnHAgCc05FhVC0iGD/mRTa87HDtk08LIJnxl200fux8jcJoKPPjptCbDens7sFax5iyEnzPo+FQEwDpVIJELAYiOOeGhlG14vnG2WhvIPZMKf7q9HOM52+mrx5kWNOuHlSVk8pLOa/idC6umsiXJ5yBeB5733yHFzZsZtPWt9iz/xDWKTmpBPFYDBkKRtWJ5xt1YbWPMReJ8Y3a0CLiDZiHYURHVzdGhDEnlHDl1AuYNqWSU78ylvZUkm1tHSza9x5Z65h86pe4alIFs7NZ9u/cxfp/bObFV7dRf/A9osiRk0oQiwWDIRQRVZWvS6bi8t+awL9Voz4AESGMIjKFBXxj8tlMqZrISWNPoT2V5LWWdl452EhDeweRc6SDABHoDCMEGJ2Xw6TRpVxQWkRpNuTQrnpe3lTLMxv+ybuNzQSB3wehasUPPBfZNZIZf/mvje//XKPQijFeNgwpLy3h8UfupjEeY0PjYbY0NtPQ3oFTJR34JP2+QA4w/a/kgNBaOsMI+mEqyjJMLi1mXOBz/Y13sG3HO6RTCZx1VvzAU2tr/A/nHcLQkinIw+WkuWX9qzinpGM++fEATww9UURzVzfxIMCI0J3NkuqH8oyhIBFHgPbuHv66ex+Pv1XHY9OrGDOqmNfDiJxBM01VZYiKB+scYRhRkIihDhyKIHzQ20tZbg43TTiDk3CgSpMfUPPOPuoOt5Efj2H78+wbQ34iTsx42MgSRtGxuTFYQ/a79BeiU8Up+EboyIZMHF3GzeXFrFj9z5y0wmU4Vc1Q1+rD6kwiiguzKOu/gBTr/sxpzU1s3jKufSEEVlrMSIYEZzCB9mIn407mblTzmfh71dwyVWzaT/Sje/7ODe0hYioQRlx/Y4iS25Ois7OLr59/W20b6pl+bTzSXge3VFE1jpCa7n34kmUNRxk2lVzaGrt4N3GVoz5eM4HSxXPINo2/Dfok7WWeCxGMhYw6yeLWP/wE6yYWsnodIqEEf487TwOrN/IZTfMIxuGpBLx49vP8FJB23xUN6EWREacis71DZNMQR7zfrOMhncbuWfebPAMq/+4ioVLVlCUn4sx5mOtNoQERay4l4WqKj/TUbDFeMGZakM3sJiOJN/zaGpp41tTKslJJ6lZ9yKZogJ0mEr/yIs7xEOda06F4VgBKJlw+SXiBX9TG0Wok08D4XkeHUc7cU7Jz0tj7ac5AdWBWBPEAxv13tBSu3a5obraa96y9nlne+eKH/ji+R6qDlU70mWjyOakkjYvN2VtZEd8tv9yIp4xQTxw2Z7FLbVrlx/7NRv4PyypuPRKvGCRiIxF5PhZ/L9oIIaCqtuvqgtbtjz5IPPnGxYscMfD90OcOKk62RtG00W4UKEUdah+liXruERUEQNKG/BKb3fnuiM7n2+F+QYWOID/AtOS6/25qiOdAAAAAElFTkSuQmCC">
+<style>
+  :root{
+    --ink:#1f2933; --muted:#616e7c; --line:#dfe4e8; --bg:#eef1f4;
+    --card:#ffffff; --navy1:#273244; --navy2:#161c27; --teal:#f59e0b; --teal-lo:#a9700a; --low:#2471a3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:linear-gradient(160deg,var(--navy1),var(--navy2));color:#eafcff;padding:26px 20px 34px}
+  header .wrap{max-width:760px;margin:0 auto}
+  header a.home{color:#bfe3ea;text-decoration:none;font-size:13px;font-weight:600}
+  header a.home:hover{text-decoration:underline}
+  header .kicker{display:block;margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffc247}
+  header h1{margin:6px 0 0;font-size:28px;line-height:1.25;letter-spacing:.2px}
+  header .sub{color:#cfd8e2;margin:10px 0 0;font-size:15px}
+  main{max-width:760px;margin:24px auto 0;padding:0 20px 50px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 34px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  article h2{font-size:20px;color:var(--navy2);margin:30px 0 8px}
+  article h2:first-of-type{margin-top:4px}
+  article h3{font-size:16px;color:var(--navy2);margin:22px 0 4px}
+  p,li{color:#333}
+  a{color:var(--low)}
+  ul,ol{padding-left:22px;margin:8px 0}
+  li{margin:5px 0}
+  code{background:#f1f4f7;border:1px solid #e2e8ee;border-radius:5px;padding:1px 5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:#0b3a53;word-break:break-all}
+  pre{background:#161c27;color:#e6edf3;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px;line-height:1.55;margin:10px 0}
+  pre code{background:none;border:0;color:inherit;padding:0}
+  .tldr{background:#fff8ec;border:1px solid #f3d9a6;border-radius:10px;padding:14px 18px;margin:0 0 20px}
+  .tldr b{color:#8a5a0c}
+  .note{background:#f3f7fa;border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:8px;padding:12px 16px;font-size:14.5px;color:#2c3a46;margin:14px 0}
+  .cta-scan{display:block;text-align:center;background:var(--teal);color:#fff;font-weight:800;text-decoration:none;padding:15px;border-radius:12px;margin:26px 0 0}
+  .cta-scan:hover{filter:brightness(1.07)}
+  .related{margin:26px 0 0;border-top:1px solid var(--line);padding-top:14px}
+  .related b{color:var(--navy2)}
+  .related a{display:block;margin:6px 0;font-weight:600}
+  footer{max-width:760px;margin:0 auto;padding:14px 20px 40px;color:var(--muted);font-size:12px;text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="home" href="/guides">← All guides</a>
+    <span class="kicker">DNS · Infrastructure</span>
+    <h1>DNS security: CAA records, DNSSEC and common misconfigurations</h1>
+    <p class="sub">The DNS is the first step in every web connection. Getting it wrong opens the door to
+      certificate fraud, spoofing and traffic hijacking.</p>
+  </div>
+</header>
+
+<main>
+<article class="card">
+  <div class="tldr"><b>In short:</b> DNS translates your domain name into an IP address. Without DNS security
+    controls, attackers can forge DNS answers or trick certificate authorities into issuing fake certificates
+    for your domain. Add a <b>CAA record</b> to restrict who can issue certs, and consider <b>DNSSEC</b> to
+    cryptographically sign your DNS data.</div>
+
+  <h2>What DNS actually does</h2>
+  <p>When someone types <code>example.com</code> into a browser, their device asks a chain of DNS resolvers
+    "what is the IP address for this domain?" The resolver works up through root servers, TLD servers and
+    finally your authoritative name server — all in a fraction of a second — and returns the answer. That
+    answer is then used for every connection: loading the website, sending email, verifying certificates.</p>
+  <p>DNS was designed in 1983, before internet security was a concern, and it shows. Without security
+    extensions, there is no built-in way to verify that an answer has not been tampered with on its way back
+    to the requester.</p>
+
+  <h2>CAA records: controlling who can issue certificates for your domain</h2>
+  <p>A <strong>Certification Authority Authorization (CAA) record</strong> is a DNS record that tells every
+    certificate authority (CA) in the world whether it is permitted to issue a TLS certificate for your
+    domain. CAs are required by industry rules to check CAA records before issuing a certificate.</p>
+  <p>Without a CAA record, any of the hundreds of trusted CAs can issue a certificate for your domain — even
+    if you have only ever used Let's Encrypt. If a CA is compromised or makes an error, your domain could
+    receive a fraudulent certificate that browsers would trust. A CAA record limits that blast radius.</p>
+
+  <h3>Example CAA records</h3>
+  <pre><code># Allow only Let's Encrypt to issue standard certificates
+example.com. CAA 0 issue "letsencrypt.org"
+
+# Allow only Let's Encrypt to issue wildcard certificates
+example.com. CAA 0 issuewild "letsencrypt.org"
+
+# Send violation reports here
+example.com. CAA 0 iodef "mailto:security@example.com"</code></pre>
+
+  <p>To add these, go to your domain's DNS management panel (wherever you registered the domain or manage
+    DNS — Cloudflare, Route53, your registrar) and add CAA records. If you use multiple CAs, add one
+    <code>issue</code> record per CA.</p>
+  <div class="note">Common CA hostnames for CAA records: <code>letsencrypt.org</code> (Let's Encrypt),
+    <code>digicert.com</code>, <code>sectigo.com</code>, <code>amazon.com</code> (AWS ACM).</div>
+
+  <h2>DNSSEC: cryptographic signatures for DNS answers</h2>
+  <p><strong>DNSSEC</strong> (DNS Security Extensions) adds a layer of cryptographic signatures to DNS
+    records. When DNSSEC is enabled, each DNS answer comes with a signature that resolvers can verify using
+    a chain of public keys published in DNS itself. A tampered or forged answer will have an invalid
+    signature and be rejected.</p>
+  <p>DNSSEC protects against <em>DNS cache poisoning</em> — a class of attack where a malicious resolver
+    returns a forged IP address, redirecting users to an attacker's server. The attack was dramatically
+    demonstrated by security researcher Dan Kaminsky in 2008 and remains a theoretical threat on networks
+    with weak resolver software.</p>
+
+  <h3>DNSSEC in practice</h3>
+  <p>Enabling DNSSEC is usually done in two places:</p>
+  <ol>
+    <li>Your <b>authoritative DNS provider</b> generates and publishes the zone-signing keys and
+      signatures. Most managed DNS providers (Cloudflare, Route53, Google Cloud DNS) can do this with
+      one click.</li>
+    <li>Your <b>domain registrar</b> publishes a Delegation Signer (DS) record at the parent zone (the
+      TLD), creating the chain of trust. This step requires coordination between your DNS provider and
+      your registrar — most registrars support it, though the UI varies.</li>
+  </ol>
+  <div class="note">Cloudflare makes DNSSEC especially simple: enable it in the DNS tab and it handles
+    key generation, signing and DS record publishing automatically via your registrar's EPP protocol.
+    For Route53, enable signing in the hosted zone settings and copy the DS record to your registrar.</div>
+
+  <h2>Common DNS misconfigurations to avoid</h2>
+
+  <h3>Subdomain takeover</h3>
+  <p>If a DNS record points to a service (a CDN, a cloud platform, a SaaS tool) that you have since
+    deactivated, an attacker can claim that service's endpoint and serve content from your subdomain.
+    Regularly audit CNAME and A records pointing to third-party services and remove them when the service
+    is discontinued.</p>
+
+  <h3>Open DNS resolvers</h3>
+  <p>Running your own DNS resolver and leaving it open to arbitrary queries from the internet makes it a
+    tool for DNS amplification DDoS attacks. Restrict your resolver to serve only your own hosts, or use
+    a managed resolver like Cloudflare's 1.1.1.1 instead of running your own.</p>
+
+  <h3>Zone transfer exposure</h3>
+  <p>DNS zone transfers (AXFR) let secondary name servers copy your full zone file. If AXFR is open to
+    all IPs, anyone can retrieve your complete internal DNS map — a useful reconnaissance tool for attackers.
+    Restrict zone transfers to known secondary IP addresses only.</p>
+
+  <h3>Wildcard DNS abuse</h3>
+  <p>A wildcard record like <code>*.example.com → 1.2.3.4</code> is convenient, but it can mask dangling
+    subdomain records and complicate your CAA policy. Use wildcards deliberately, and pair them with
+    <code>issuewild</code> CAA records to control wildcard certificate issuance separately from standard
+    certificate issuance.</p>
+
+  <h2>What CyberScore checks</h2>
+  <p>CyberScore's DNS module passively checks whether your domain has CAA records and flags their absence
+    as a low-severity finding. It also checks for consistent name-server configurations. DNSSEC validation
+    state is inspected in the deep TLS scan. No zone transfer or active probing is performed — all checks
+    use standard public DNS queries.</p>
+
+  <a class="cta-scan" href="/">Run a DNS check on your domain →</a>
+
+  <div class="related">
+    <b>Related guides</b>
+    <a href="/guides/tls-ssl-explained">TLS &amp; SSL explained →</a>
+    <a href="/guides/spf-dkim-dmarc">Stop email spoofing: SPF, DKIM &amp; DMARC →</a>
+    <a href="/guides/http-security-headers">HTTP security headers explained →</a>
+  </div>
+</article>
+</main>
+
+<footer>CyberScore · cyberscore.cc · powered by VortiSec · <a href="/about">About</a> · <a href="/faq">FAQ</a> · <a href="/guides">Guides</a> · <a href="/privacy">Privacy</a> · <a href="/contact">Contact</a></footer>
+</body>
+</html>

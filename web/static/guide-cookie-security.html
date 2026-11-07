@@ -1,0 +1,189 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cookie Security Flags: HttpOnly, Secure and SameSite Explained · CyberScore</title>
+<meta name="description" content="Cookies without the right security flags are a common source of session hijacking and CSRF vulnerabilities. Learn what HttpOnly, Secure and SameSite do and how to set them.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cyberscore.cc/guides/cookie-security">
+<meta property="og:title" content="Cookie Security Flags: HttpOnly, Secure and SameSite Explained">
+<meta property="og:description" content="HttpOnly, Secure and SameSite — what each cookie flag does, the attack it prevents, and copy-ready examples for common server stacks.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cyberscore.cc/guides/cookie-security">
+<meta property="og:image" content="https://cyberscore.cc/static/img/og.png">
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2727863150599775" crossorigin="anonymous"></script>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAHyElEQVR4nK2Xe2xX5RnHP897zvlde++vtBaZm1EzRN0KilTFOiayC+JlNl42mInZlBHNNpyTmckIxCxblGzihqjMoYCzEdHgdOIcCipu5aI4nFAKBcTWlrZSevud877P/mgLVdt62b7JSc4fJ8/3c85zeZ8jDKi62qOmxgKUTvjOuYo7z4mW4gAQPp/UGIOqtqno5pbatRsBN9hLBpsXjb90kmf8u1AuFM/zPqfp0CTOAlKrkbuzZfvaZwc8ZeAmUzHjGuP5KzGeURuCqv2koCJ9/Kr6yQQiRowviGBt9tbDW566m+pqTwCKz77iHE9ks6oKTi2CP5KpMQII2TBEVYnHAgCc05FhVC0iGD/mRTa87HDtk08LIJnxl200fux8jcJoKPPjptCbDens7sFax5iyEnzPo+FQEwDpVIJELAYiOOeGhlG14vnG2WhvIPZMKf7q9HOM52+mrx5kWNOuHlSVk8pLOa/idC6umsiXJ5yBeB5733yHFzZsZtPWt9iz/xDWKTmpBPFYDBkKRtWJ5xt1YbWPMReJ8Y3a0CLiDZiHYURHVzdGhDEnlHDl1AuYNqWSU78ylvZUkm1tHSza9x5Z65h86pe4alIFs7NZ9u/cxfp/bObFV7dRf/A9osiRk0oQiwWDIRQRVZWvS6bi8t+awL9Voz4AESGMIjKFBXxj8tlMqZrISWNPoT2V5LWWdl452EhDeweRc6SDABHoDCMEGJ2Xw6TRpVxQWkRpNuTQrnpe3lTLMxv+ybuNzQSB3wehasUPPBfZNZIZf/mvje//XKPQijFeNgwpLy3h8UfupjEeY0PjYbY0NtPQ3oFTJR34JP2+QA4w/a/kgNBaOsMI+mEqyjJMLi1mXOBz/Y13sG3HO6RTCZx1VvzAU2tr/A/nHcLQkinIw+WkuWX9qzinpGM++fEATww9UURzVzfxIMCI0J3NkuqH8oyhIBFHgPbuHv66ex+Pv1XHY9OrGDOqmNfDiJxBM01VZYiKB+scYRhRkIihDhyKIHzQ20tZbg43TTiDk3CgSpMfUPPOPuoOt5Efj2H78+wbQ34iTsx42MgSRtGxuTFYQ/a79BeiU8Up+EboyIZMHF3GzeXFrFj9z5y0wmU4Vc1Q1+rD6kwiiguzKOu/gBTr/sxpzU1s3jKufSEEVlrMSIYEZzCB9mIn407mblTzmfh71dwyVWzaT/Sje/7ODe0hYioQRlx/Y4iS25Ois7OLr59/W20b6pl+bTzSXge3VFE1jpCa7n34kmUNRxk2lVzaGrt4N3GVoz5eM4HSxXPINo2/Dfok7WWeCxGMhYw6yeLWP/wE6yYWsnodIqEEf487TwOrN/IZTfMIxuGpBLx49vP8FJB23xUN6EWREacis71DZNMQR7zfrOMhncbuWfebPAMq/+4ioVLVlCUn4sx5mOtNoQERay4l4WqKj/TUbDFeMGZakM3sJiOJN/zaGpp41tTKslJJ6lZ9yKZogJ0mEr/yIs7xEOda06F4VgBKJlw+SXiBX9TG0Wok08D4XkeHUc7cU7Jz0tj7ac5AdWBWBPEAxv13tBSu3a5obraa96y9nlne+eKH/ji+R6qDlU70mWjyOakkjYvN2VtZEd8tv9yIp4xQTxw2Z7FLbVrlx/7NRv4PyypuPRKvGCRiIxF5PhZ/L9oIIaCqtuvqgtbtjz5IPPnGxYscMfD90OcOKk62RtG00W4UKEUdah+liXruERUEQNKG/BKb3fnuiM7n2+F+QYWOID/AtOS6/25qiOdAAAAAElFTkSuQmCC">
+<style>
+  :root{
+    --ink:#1f2933; --muted:#616e7c; --line:#dfe4e8; --bg:#eef1f4;
+    --card:#ffffff; --navy1:#273244; --navy2:#161c27; --teal:#f59e0b; --teal-lo:#a9700a; --low:#2471a3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:linear-gradient(160deg,var(--navy1),var(--navy2));color:#eafcff;padding:26px 20px 34px}
+  header .wrap{max-width:760px;margin:0 auto}
+  header a.home{color:#bfe3ea;text-decoration:none;font-size:13px;font-weight:600}
+  header a.home:hover{text-decoration:underline}
+  header .kicker{display:block;margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffc247}
+  header h1{margin:6px 0 0;font-size:28px;line-height:1.25;letter-spacing:.2px}
+  header .sub{color:#cfd8e2;margin:10px 0 0;font-size:15px}
+  main{max-width:760px;margin:24px auto 0;padding:0 20px 50px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 34px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  article h2{font-size:20px;color:var(--navy2);margin:30px 0 8px}
+  article h2:first-of-type{margin-top:4px}
+  article h3{font-size:16px;color:var(--navy2);margin:22px 0 4px}
+  p,li{color:#333}
+  a{color:var(--low)}
+  ul,ol{padding-left:22px;margin:8px 0}
+  li{margin:5px 0}
+  code{background:#f1f4f7;border:1px solid #e2e8ee;border-radius:5px;padding:1px 5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:#0b3a53;word-break:break-all}
+  pre{background:#161c27;color:#e6edf3;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px;line-height:1.55;margin:10px 0}
+  pre code{background:none;border:0;color:inherit;padding:0}
+  .tldr{background:#fff8ec;border:1px solid #f3d9a6;border-radius:10px;padding:14px 18px;margin:0 0 20px}
+  .tldr b{color:#8a5a0c}
+  .note{background:#f3f7fa;border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:8px;padding:12px 16px;font-size:14.5px;color:#2c3a46;margin:14px 0}
+  .flag-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14.5px}
+  .flag-table th{text-align:left;padding:8px 12px;background:#f1f4f7;border:1px solid var(--line);color:var(--navy2)}
+  .flag-table td{padding:8px 12px;border:1px solid var(--line);vertical-align:top}
+  .cta-scan{display:block;text-align:center;background:var(--teal);color:#fff;font-weight:800;text-decoration:none;padding:15px;border-radius:12px;margin:26px 0 0}
+  .cta-scan:hover{filter:brightness(1.07)}
+  .related{margin:26px 0 0;border-top:1px solid var(--line);padding-top:14px}
+  .related b{color:var(--navy2)}
+  .related a{display:block;margin:6px 0;font-weight:600}
+  footer{max-width:760px;margin:0 auto;padding:14px 20px 40px;color:var(--muted);font-size:12px;text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="home" href="/guides">← All guides</a>
+    <span class="kicker">Cookies · Session Security</span>
+    <h1>Cookie security flags: HttpOnly, Secure and SameSite explained</h1>
+    <p class="sub">Three attributes on a cookie header can be the difference between a safe session and a
+      hijacked one. Here's what each does and how to add it.</p>
+  </div>
+</header>
+
+<main>
+<article class="card">
+  <div class="tldr"><b>In short:</b> Every session cookie should carry three flags: <b>Secure</b> (only sent
+    over HTTPS), <b>HttpOnly</b> (not readable by JavaScript, blocks XSS-based theft) and
+    <b>SameSite=Strict</b> or <b>Lax</b> (stops cross-site request forgery). Without them, one XSS or
+    network interception vulnerability becomes a full account takeover.</div>
+
+  <h2>What is a cookie, in security terms?</h2>
+  <p>When you log into a website, the server typically stores a unique token in a cookie — a small piece of
+    data that your browser sends back automatically on every subsequent request. This is how the server knows
+    you are still logged in. If an attacker can steal or forge that cookie, they can impersonate you without
+    ever knowing your password.</p>
+  <p>The three security flags on a cookie directly limit the ways an attacker can steal or misuse it.</p>
+
+  <h2>The Secure flag</h2>
+  <p>When a cookie has the <code>Secure</code> flag, browsers will only send it over an encrypted HTTPS
+    connection — never over plain HTTP. Without it, your session cookie travels in cleartext over any HTTP
+    request, where anyone on the same network (a coffee-shop Wi-Fi, a corporate proxy, a compromised router)
+    can read it.</p>
+  <div class="note">The <code>Secure</code> flag is only effective when your site enforces HTTPS. Combine it
+    with HSTS to ensure browsers never connect over HTTP in the first place.</div>
+
+  <h2>The HttpOnly flag</h2>
+  <p>An <code>HttpOnly</code> cookie cannot be read or modified by JavaScript — only by the browser itself
+    when making HTTP requests. This directly limits the damage from a Cross-Site Scripting (XSS) attack.</p>
+  <p>Without <code>HttpOnly</code>, an XSS payload like <code>document.cookie</code> returns all cookies,
+    and an attacker who injected a script can steal your session token and send it to their server. With
+    <code>HttpOnly</code> set, that JavaScript call returns an empty string — the cookie is invisible to
+    scripts.</p>
+  <div class="note"><code>HttpOnly</code> does not prevent XSS — it limits its impact. You should still
+    implement Content-Security-Policy to reduce the XSS attack surface.</div>
+
+  <h2>The SameSite flag</h2>
+  <p><code>SameSite</code> controls whether the browser sends a cookie along with cross-site requests. It
+    has three values:</p>
+  <table class="flag-table">
+    <tr><th>Value</th><th>When cookie is sent</th><th>Use for</th></tr>
+    <tr>
+      <td><code>Strict</code></td>
+      <td>Only when navigating within the same site. Never on cross-site requests.</td>
+      <td>High-security cookies (admin sessions, banking). May break links from external sites.</td>
+    </tr>
+    <tr>
+      <td><code>Lax</code></td>
+      <td>Same-site requests + top-level GET navigations from other sites (a user clicking a link).</td>
+      <td>Most session cookies. Good balance of security and usability. This is the browser default if SameSite is not set.</td>
+    </tr>
+    <tr>
+      <td><code>None`</code></td>
+      <td>All requests including cross-site. Must be paired with <code>Secure</code>.</td>
+      <td>Third-party cookies, embeds, payment widgets that must work inside iframes.</td>
+    </tr>
+  </table>
+  <p>Without <code>SameSite</code>, the browser sends your session cookie on every request to your site —
+    including those triggered silently by a malicious third-party page. This enables <strong>Cross-Site
+    Request Forgery (CSRF)</strong>: an attacker tricks your browser into making a request to your bank or
+    webmail while you are logged in, performing an action on your behalf.</p>
+
+  <h2>What the full header looks like</h2>
+  <pre><code>Set-Cookie: session=abc123; Secure; HttpOnly; SameSite=Lax; Path=/; Max-Age=86400</code></pre>
+
+  <h3>Nginx</h3>
+  <pre><code>proxy_cookie_flags ~ secure httponly samesite=lax;</code></pre>
+
+  <h3>Apache</h3>
+  <pre><code>Header edit Set-Cookie ^(.*)$ "$1; Secure; HttpOnly; SameSite=Lax"</code></pre>
+
+  <h3>Express (Node.js)</h3>
+  <pre><code>res.cookie('session', token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'lax',
+  maxAge: 86400000
+});</code></pre>
+
+  <h3>PHP</h3>
+  <pre><code>session_set_cookie_params([
+    'secure'   => true,
+    'httponly' => true,
+    'samesite' => 'Lax',
+]);</code></pre>
+
+  <h3>Django (Python)</h3>
+  <pre><code># settings.py
+SESSION_COOKIE_SECURE   = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE      = True</code></pre>
+
+  <h2>What about the __Host- and __Secure- prefixes?</h2>
+  <p>Cookie name prefixes are an additional protection layer:</p>
+  <ul>
+    <li><code>__Secure-session</code> — the browser will only accept and send this cookie if it was set
+      with the <code>Secure</code> flag and from an HTTPS origin.</li>
+    <li><code>__Host-session</code> — additionally requires the cookie to have no <code>Domain</code>
+      attribute and <code>Path=/</code>. This locks it to the exact host, preventing subdomain attacks.</li>
+  </ul>
+  <p>Rename your session cookie to <code>__Host-session</code> for the strongest available session-cookie
+    protection in modern browsers.</p>
+
+  <h2>What CyberScore checks</h2>
+  <p>CyberScore makes one real HTTPS request to your domain and inspects every <code>Set-Cookie</code>
+    header in the response. Any cookie missing <code>Secure</code>, <code>HttpOnly</code> or
+    <code>SameSite</code> is flagged with the specific attribute name, so you know exactly what to fix
+    on each cookie.</p>
+
+  <a class="cta-scan" href="/">Check your cookies now →</a>
+
+  <div class="related">
+    <b>Related guides</b>
+    <a href="/guides/http-security-headers">HTTP security headers explained →</a>
+    <a href="/guides/tls-ssl-explained">TLS &amp; SSL explained →</a>
+    <a href="/guides/what-is-a-security-score">What is a security score? →</a>
+  </div>
+</article>
+</main>
+
+<footer>CyberScore · cyberscore.cc · powered by VortiSec · <a href="/about">About</a> · <a href="/faq">FAQ</a> · <a href="/guides">Guides</a> · <a href="/privacy">Privacy</a> · <a href="/contact">Contact</a></footer>
+</body>
+</html>

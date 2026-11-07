@@ -1,0 +1,196 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Common Website Security Vulnerabilities and How to Fix Them · CyberScore</title>
+<meta name="description" content="From missing security headers to exposed server information and weak TLS — the most common website security issues, what they mean, and how to fix them step by step.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cyberscore.cc/guides/common-web-vulnerabilities">
+<meta property="og:title" content="Common Website Security Vulnerabilities and How to Fix Them">
+<meta property="og:description" content="The most common website security issues — missing headers, weak TLS, exposed server info, missing email auth — with step-by-step fixes.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cyberscore.cc/guides/common-web-vulnerabilities">
+<meta property="og:image" content="https://cyberscore.cc/static/img/og.png">
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2727863150599775" crossorigin="anonymous"></script>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAHyElEQVR4nK2Xe2xX5RnHP897zvlde++vtBaZm1EzRN0KilTFOiayC+JlNl42mInZlBHNNpyTmckIxCxblGzihqjMoYCzEdHgdOIcCipu5aI4nFAKBcTWlrZSevud877P/mgLVdt62b7JSc4fJ8/3c85zeZ8jDKi62qOmxgKUTvjOuYo7z4mW4gAQPp/UGIOqtqno5pbatRsBN9hLBpsXjb90kmf8u1AuFM/zPqfp0CTOAlKrkbuzZfvaZwc8ZeAmUzHjGuP5KzGeURuCqv2koCJ9/Kr6yQQiRowviGBt9tbDW566m+pqTwCKz77iHE9ks6oKTi2CP5KpMQII2TBEVYnHAgCc05FhVC0iGD/mRTa87HDtk08LIJnxl200fux8jcJoKPPjptCbDens7sFax5iyEnzPo+FQEwDpVIJELAYiOOeGhlG14vnG2WhvIPZMKf7q9HOM52+mrx5kWNOuHlSVk8pLOa/idC6umsiXJ5yBeB5733yHFzZsZtPWt9iz/xDWKTmpBPFYDBkKRtWJ5xt1YbWPMReJ8Y3a0CLiDZiHYURHVzdGhDEnlHDl1AuYNqWSU78ylvZUkm1tHSza9x5Z65h86pe4alIFs7NZ9u/cxfp/bObFV7dRf/A9osiRk0oQiwWDIRQRVZWvS6bi8t+awL9Voz4AESGMIjKFBXxj8tlMqZrISWNPoT2V5LWWdl452EhDeweRc6SDABHoDCMEGJ2Xw6TRpVxQWkRpNuTQrnpe3lTLMxv+ybuNzQSB3wehasUPPBfZNZIZf/mvje//XKPQijFeNgwpLy3h8UfupjEeY0PjYbY0NtPQ3oFTJR34JP2+QA4w/a/kgNBaOsMI+mEqyjJMLi1mXOBz/Y13sG3HO6RTCZx1VvzAU2tr/A/nHcLQkinIw+WkuWX9qzinpGM++fEATww9UURzVzfxIMCI0J3NkuqH8oyhIBFHgPbuHv66ex+Pv1XHY9OrGDOqmNfDiJxBM01VZYiKB+scYRhRkIihDhyKIHzQ20tZbg43TTiDk3CgSpMfUPPOPuoOt5Efj2H78+wbQ34iTsx42MgSRtGxuTFYQ/a79BeiU8Up+EboyIZMHF3GzeXFrFj9z5y0wmU4Vc1Q1+rD6kwiiguzKOu/gBTr/sxpzU1s3jKufSEEVlrMSIYEZzCB9mIn407mblTzmfh71dwyVWzaT/Sje/7ODe0hYioQRlx/Y4iS25Ois7OLr59/W20b6pl+bTzSXge3VFE1jpCa7n34kmUNRxk2lVzaGrt4N3GVoz5eM4HSxXPINo2/Dfok7WWeCxGMhYw6yeLWP/wE6yYWsnodIqEEf487TwOrN/IZTfMIxuGpBLx49vP8FJB23xUN6EWREacis71DZNMQR7zfrOMhncbuWfebPAMq/+4ioVLVlCUn4sx5mOtNoQERay4l4WqKj/TUbDFeMGZakM3sJiOJN/zaGpp41tTKslJJ6lZ9yKZogJ0mEr/yIs7xEOda06F4VgBKJlw+SXiBX9TG0Wok08D4XkeHUc7cU7Jz0tj7ac5AdWBWBPEAxv13tBSu3a5obraa96y9nlne+eKH/ji+R6qDlU70mWjyOakkjYvN2VtZEd8tv9yIp4xQTxw2Z7FLbVrlx/7NRv4PyypuPRKvGCRiIxF5PhZ/L9oIIaCqtuvqgtbtjz5IPPnGxYscMfD90OcOKk62RtG00W4UKEUdah+liXruERUEQNKG/BKb3fnuiM7n2+F+QYWOID/AtOS6/25qiOdAAAAAElFTkSuQmCC">
+<style>
+  :root{
+    --ink:#1f2933; --muted:#616e7c; --line:#dfe4e8; --bg:#eef1f4;
+    --card:#ffffff; --navy1:#273244; --navy2:#161c27; --teal:#f59e0b; --teal-lo:#a9700a; --low:#2471a3;
+    --high:#c0392b; --med:#d68910; --low-col:#1e8449;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:linear-gradient(160deg,var(--navy1),var(--navy2));color:#eafcff;padding:26px 20px 34px}
+  header .wrap{max-width:760px;margin:0 auto}
+  header a.home{color:#bfe3ea;text-decoration:none;font-size:13px;font-weight:600}
+  header a.home:hover{text-decoration:underline}
+  header .kicker{display:block;margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffc247}
+  header h1{margin:6px 0 0;font-size:28px;line-height:1.25;letter-spacing:.2px}
+  header .sub{color:#cfd8e2;margin:10px 0 0;font-size:15px}
+  main{max-width:760px;margin:24px auto 0;padding:0 20px 50px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 34px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  article h2{font-size:20px;color:var(--navy2);margin:30px 0 8px}
+  article h2:first-of-type{margin-top:4px}
+  article h3{font-size:16px;color:var(--navy2);margin:22px 0 4px}
+  p,li{color:#333}
+  a{color:var(--low)}
+  ul,ol{padding-left:22px;margin:8px 0}
+  li{margin:5px 0}
+  code{background:#f1f4f7;border:1px solid #e2e8ee;border-radius:5px;padding:1px 5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:#0b3a53;word-break:break-all}
+  pre{background:#161c27;color:#e6edf3;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px;line-height:1.55;margin:10px 0}
+  pre code{background:none;border:0;color:inherit;padding:0}
+  .tldr{background:#fff8ec;border:1px solid #f3d9a6;border-radius:10px;padding:14px 18px;margin:0 0 20px}
+  .tldr b{color:#8a5a0c}
+  .note{background:#f3f7fa;border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:8px;padding:12px 16px;font-size:14.5px;color:#2c3a46;margin:14px 0}
+  .sev{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-bottom:4px}
+  .sev-h{background:#fce8e8;color:var(--high)}
+  .sev-m{background:#fef5e0;color:#7d5a00}
+  .sev-l{background:#e9f7ef;color:#1a6338}
+  .cta-scan{display:block;text-align:center;background:var(--teal);color:#fff;font-weight:800;text-decoration:none;padding:15px;border-radius:12px;margin:26px 0 0}
+  .cta-scan:hover{filter:brightness(1.07)}
+  .related{margin:26px 0 0;border-top:1px solid var(--line);padding-top:14px}
+  .related b{color:var(--navy2)}
+  .related a{display:block;margin:6px 0;font-weight:600}
+  footer{max-width:760px;margin:0 auto;padding:14px 20px 40px;color:var(--muted);font-size:12px;text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="home" href="/guides">← All guides</a>
+    <span class="kicker">Web Security · Hardening</span>
+    <h1>Common website security vulnerabilities and how to fix them</h1>
+    <p class="sub">The issues CyberScore finds most often — what each one is, why it matters, and the
+      exact steps to fix it.</p>
+  </div>
+</header>
+
+<main>
+<article class="card">
+  <div class="tldr"><b>In short:</b> Most websites fail on the same handful of issues: no HTTPS redirect,
+    missing security headers, exposed server banners and no email authentication. All are fixable in an
+    afternoon with server config changes — no code changes required.</div>
+
+  <h2>1. HTTP not redirecting to HTTPS</h2>
+  <p><span class="sev sev-m">Medium</span></p>
+  <p><strong>What it is:</strong> Your site is accessible over both <code>http://</code> and
+    <code>https://</code>, but plain HTTP requests are not automatically redirected to the secure version.
+    Users who type your domain without <code>https://</code> (which is most users) may land on the
+    unencrypted version.</p>
+  <p><strong>Why it matters:</strong> Any data submitted on an HTTP page — including login forms, search
+    queries and contact details — travels in cleartext and can be read or modified by anyone between the
+    user and your server.</p>
+  <p><strong>Fix (Nginx):</strong></p>
+  <pre><code>server {
+    listen 80;
+    server_name example.com www.example.com;
+    return 301 https://$host$request_uri;
+}</code></pre>
+  <p><strong>Fix (Caddy):</strong> Caddy does this automatically when you specify your domain — no
+    configuration needed.</p>
+
+  <h2>2. Missing HSTS header</h2>
+  <p><span class="sev sev-m">Medium</span></p>
+  <p><strong>What it is:</strong> <code>Strict-Transport-Security</code> (HSTS) tells browsers to
+    <em>always</em> use HTTPS for your domain — even before they get a redirect. Without it, a user's very
+    first HTTP request (before the redirect) is unprotected and can be intercepted.</p>
+  <p><strong>Fix:</strong> Add this header to HTTPS responses:</p>
+  <pre><code>Strict-Transport-Security: max-age=63072000; includeSubDomains; preload</code></pre>
+  <p>The <code>preload</code> directive lets you submit your domain to the browser's built-in HSTS preload
+    list, so the first visit is also protected. Submit at
+    <a href="https://hstspreload.org" target="_blank" rel="noopener">hstspreload.org</a> after the header
+    is live.</p>
+
+  <h2>3. No Content-Security-Policy</h2>
+  <p><span class="sev sev-m">Medium</span></p>
+  <p><strong>What it is:</strong> CSP tells the browser which scripts, styles, images and iframes are
+    allowed on your page. Without it, any injected JavaScript — from an XSS vulnerability, a compromised
+    third-party script or a browser extension — can read your users' data.</p>
+  <p><strong>Starting point for a simple site:</strong></p>
+  <pre><code>Content-Security-Policy: default-src 'self'; img-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-ancestors 'none'</code></pre>
+  <div class="note">CSP is the most complex security header to get right. Start with
+    <code>Content-Security-Policy-Report-Only</code> to see what it would block before enforcing it, so
+    you don't break anything on your site.</div>
+
+  <h2>4. Missing X-Frame-Options</h2>
+  <p><span class="sev sev-m">Medium</span></p>
+  <p><strong>What it is:</strong> Without this header, your site can be loaded inside an invisible iframe
+    on a malicious page. This enables <em>clickjacking</em>: the user thinks they are clicking on something
+    on the malicious page, but they are really clicking on your site behind it — submitting a form, making
+    a purchase or changing account settings.</p>
+  <p><strong>Fix:</strong></p>
+  <pre><code>X-Frame-Options: DENY</code></pre>
+  <p>Or, if you need to allow framing from your own origin: <code>X-Frame-Options: SAMEORIGIN</code>.
+    The modern equivalent is <code>Content-Security-Policy: frame-ancestors 'none'</code>, which is more
+    flexible.</p>
+
+  <h2>5. Server version disclosed in headers</h2>
+  <p><span class="sev sev-l">Low</span></p>
+  <p><strong>What it is:</strong> The <code>Server</code> and <code>X-Powered-By</code> response headers
+    often reveal your web server software and version (e.g. <code>nginx/1.18.0</code>,
+    <code>PHP/8.1.2</code>). An attacker can use this to look up known vulnerabilities for that exact
+    version.</p>
+  <p><strong>Fix (Nginx):</strong></p>
+  <pre><code>server_tokens off;</code></pre>
+  <p><strong>Fix (Apache):</strong></p>
+  <pre><code>ServerTokens Prod
+ServerSignature Off</code></pre>
+  <p><strong>Fix (PHP/X-Powered-By):</strong></p>
+  <pre><code>; in php.ini:
+expose_php = Off</code></pre>
+
+  <h2>6. DMARC policy set to p=none</h2>
+  <p><span class="sev sev-m">Medium</span></p>
+  <p><strong>What it is:</strong> DMARC tells receiving mail servers what to do with emails that fail SPF
+    and DKIM checks. A policy of <code>p=none</code> means "do nothing — just monitor." Your domain can
+    still be used to send phishing emails that reach inboxes.</p>
+  <p><strong>Fix:</strong> Gradually move to <code>p=quarantine</code> (send to spam) and then
+    <code>p=reject</code> (block entirely).</p>
+  <pre><code>_dmarc.example.com. TXT "v=DMARC1; p=reject; rua=mailto:dmarc@example.com; pct=100"</code></pre>
+  <p>Start with <code>p=none</code> and a <code>rua</code> reporting address for a few weeks to see
+    legitimate mail flows, then move to <code>p=quarantine</code> at <code>pct=10</code>, gradually
+    increasing to <code>pct=100</code> before switching to <code>p=reject</code>.</p>
+
+  <h2>7. No SPF record</h2>
+  <p><span class="sev sev-h">High</span></p>
+  <p><strong>What it is:</strong> An SPF record tells receiving servers which IP addresses are allowed to
+    send email for your domain. Without one, anyone can send email "from" your domain and many mail servers
+    will deliver it.</p>
+  <pre><code>example.com. TXT "v=spf1 include:_spf.google.com ~all"</code></pre>
+  <p>Replace <code>include:_spf.google.com</code> with your actual mail provider's SPF include hostname.
+    Use <code>-all</code> (hard fail) rather than <code>~all</code> (soft fail) once you are confident
+    you have listed all sending sources.</p>
+
+  <h2>8. TLS 1.0 or 1.1 still enabled</h2>
+  <p><span class="sev sev-m">Medium</span></p>
+  <p><strong>What it is:</strong> TLS 1.0 (1999) and 1.1 (2006) are deprecated protocols with known
+    weaknesses. Major browsers dropped them in 2020. Leaving them enabled extends your attack surface for
+    no practical benefit.</p>
+  <p><strong>Fix (Nginx):</strong></p>
+  <pre><code>ssl_protocols TLSv1.2 TLSv1.3;</code></pre>
+  <p><strong>Fix (Apache):</strong></p>
+  <pre><code>SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1</code></pre>
+
+  <h2>Start with a scan</h2>
+  <p>CyberScore checks for all of the above and shows them in priority order with copy-ready remediation
+    steps. Run a free scan to get your personalised fix list.</p>
+
+  <a class="cta-scan" href="/">Scan your site now →</a>
+
+  <div class="related">
+    <b>Related guides</b>
+    <a href="/guides/http-security-headers">HTTP security headers explained →</a>
+    <a href="/guides/tls-ssl-explained">TLS &amp; SSL explained →</a>
+    <a href="/guides/spf-dkim-dmarc">Stop email spoofing: SPF, DKIM &amp; DMARC →</a>
+    <a href="/guides/cookie-security">Cookie security flags explained →</a>
+  </div>
+</article>
+</main>
+
+<footer>CyberScore · cyberscore.cc · powered by VortiSec · <a href="/about">About</a> · <a href="/faq">FAQ</a> · <a href="/guides">Guides</a> · <a href="/privacy">Privacy</a> · <a href="/contact">Contact</a></footer>
+</body>
+</html>
