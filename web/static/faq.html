@@ -1,0 +1,253 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Frequently Asked Questions · CyberScore</title>
+<meta name="description" content="Answers to the most common questions about CyberScore — what it checks, how to interpret results, what a good score looks like, and how to fix common issues.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cyberscore.cc/faq">
+<meta property="og:title" content="Frequently Asked Questions · CyberScore">
+<meta property="og:description" content="Everything you need to know about CyberScore — what it checks, how scoring works, and how to fix common issues.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cyberscore.cc/faq">
+<meta property="og:image" content="https://cyberscore.cc/static/img/og.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Is CyberScore free?","acceptedAnswer":{"@type":"Answer","text":"Yes. Scanning a domain, URL or email headers is completely free and requires no account or sign-up."}},
+    {"@type":"Question","name":"Does CyberScore store my scan results?","acceptedAnswer":{"@type":"Answer","text":"No. Results are computed on demand and returned directly to your browser. CyberScore does not store scan results associated with your identity or build a history of scanned domains."}},
+    {"@type":"Question","name":"Is it legal to scan a website with CyberScore?","acceptedAnswer":{"@type":"Answer","text":"CyberScore performs only passive checks using publicly available information — the same information any browser or mail server can read. It is legal and appropriate to scan any public website. Scan only sites you own or have permission to test."}},
+    {"@type":"Question","name":"What does a CyberScore grade mean?","acceptedAnswer":{"@type":"Answer","text":"A (90-100) means excellent — all major controls are in place. B (75-89) means good with a few gaps. C (55-74) is fair. D (35-54) is poor. F (0-34) means critical issues need immediate attention."}},
+    {"@type":"Question","name":"My site got an F. What should I fix first?","acceptedAnswer":{"@type":"Answer","text":"Open the Remediation tab in your scan results. Issues are listed in priority order — fix the HIGH severity ones first (they cost 20 points each), then MEDIUM (10 points each), then LOW."}},
+    {"@type":"Question","name":"How is the score calculated?","acceptedAnswer":{"@type":"Answer","text":"The score starts at 100. Each HIGH finding deducts 20 points, MEDIUM deducts 10, and LOW deducts 3 (capped at 20 total from low findings). The score never goes below 0."}}
+  ]
+}
+</script>
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2727863150599775" crossorigin="anonymous"></script>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAHyElEQVR4nK2Xe2xX5RnHP897zvlde++vtBaZm1EzRN0KilTFOiayC+JlNl42mInZlBHNNpyTmckIxCxblGzihqjMoYCzEdHgdOIcCipu5aI4nFAKBcTWlrZSevud877P/mgLVdt62b7JSc4fJ8/3c85zeZ8jDKi62qOmxgKUTvjOuYo7z4mW4gAQPp/UGIOqtqno5pbatRsBN9hLBpsXjb90kmf8u1AuFM/zPqfp0CTOAlKrkbuzZfvaZwc8ZeAmUzHjGuP5KzGeURuCqv2koCJ9/Kr6yQQiRowviGBt9tbDW566m+pqTwCKz77iHE9ks6oKTi2CP5KpMQII2TBEVYnHAgCc05FhVC0iGD/mRTa87HDtk08LIJnxl200fux8jcJoKPPjptCbDens7sFax5iyEnzPo+FQEwDpVIJELAYiOOeGhlG14vnG2WhvIPZMKf7q9HOM52+mrx5kWNOuHlSVk8pLOa/idC6umsiXJ5yBeB5733yHFzZsZtPWt9iz/xDWKTmpBPFYDBkKRtWJ5xt1YbWPMReJ8Y3a0CLiDZiHYURHVzdGhDEnlHDl1AuYNqWSU78ylvZUkm1tHSza9x5Z65h86pe4alIFs7NZ9u/cxfp/bObFV7dRf/A9osiRk0oQiwWDIRQRVZWvS6bi8t+awL9Voz4AESGMIjKFBXxj8tlMqZrISWNPoT2V5LWWdl452EhDeweRc6SDABHoDCMEGJ2Xw6TRpVxQWkRpNuTQrnpe3lTLMxv+ybuNzQSB3wehasUPPBfZNZIZf/mvje//XKPQijFeNgwpLy3h8UfupjEeY0PjYbY0NtPQ3oFTJR34JP2+QA4w/a/kgNBaOsMI+mEqyjJMLi1mXOBz/Y13sG3HO6RTCZx1VvzAU2tr/A/nHcLQkinIw+WkuWX9qzinpGM++fEATww9UURzVzfxIMCI0J3NkuqH8oyhIBFHgPbuHv66ex+Pv1XHY9OrGDOqmNfDiJxBM01VZYiKB+scYRhRkIihDhyKIHzQ20tZbg43TTiDk3CgSpMfUPPOPuoOt5Efj2H78+wbQ34iTsx42MgSRtGxuTFYQ/a79BeiU8Up+EboyIZMHF3GzeXFrFj9z5y0wmU4Vc1Q1+rD6kwiiguzKOu/gBTr/sxpzU1s3jKufSEEVlrMSIYEZzCB9mIn407mblTzmfh71dwyVWzaT/Sje/7ODe0hYioQRlx/Y4iS25Ois7OLr59/W20b6pl+bTzSXge3VFE1jpCa7n34kmUNRxk2lVzaGrt4N3GVoz5eM4HSxXPINo2/Dfok7WWeCxGMhYw6yeLWP/wE6yYWsnodIqEEf487TwOrN/IZTfMIxuGpBLx49vP8FJB23xUN6EWREacis71DZNMQR7zfrOMhncbuWfebPAMq/+4ioVLVlCUn4sx5mOtNoQERay4l4WqKj/TUbDFeMGZakM3sJiOJN/zaGpp41tTKslJJ6lZ9yKZogJ0mEr/yIs7xEOda06F4VgBKJlw+SXiBX9TG0Wok08D4XkeHUc7cU7Jz0tj7ac5AdWBWBPEAxv13tBSu3a5obraa96y9nlne+eKH/ji+R6qDlU70mWjyOakkjYvN2VtZEd8tv9yIp4xQTxw2Z7FLbVrlx/7NRv4PyypuPRKvGCRiIxF5PhZ/L9oIIaCqtuvqgtbtjz5IPPnGxYscMfD90OcOKk62RtG00W4UKEUdah+liXruERUEQNKG/BKb3fnuiM7n2+F+QYWOID/AtOS6/25qiOdAAAAAElFTkSuQmCC">
+<style>
+  :root{
+    --ink:#1f2933; --muted:#616e7c; --line:#dfe4e8; --bg:#eef1f4;
+    --card:#ffffff; --navy1:#273244; --navy2:#161c27; --teal:#f59e0b; --teal-lo:#a9700a; --low:#2471a3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:linear-gradient(160deg,var(--navy1),var(--navy2));color:#eafcff;padding:26px 20px 34px}
+  header .wrap{max-width:760px;margin:0 auto}
+  header a.home{color:#bfe3ea;text-decoration:none;font-size:13px;font-weight:600}
+  header a.home:hover{text-decoration:underline}
+  header h1{margin:12px 0 0;font-size:28px;line-height:1.25}
+  header .sub{color:#cfd8e2;margin:10px 0 0;font-size:15px}
+  main{max-width:760px;margin:24px auto 0;padding:0 20px 50px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:0;box-shadow:0 1px 2px rgba(0,0,0,.03);overflow:hidden}
+  .faq-item{border-bottom:1px solid var(--line)}
+  .faq-item:last-child{border-bottom:0}
+  .faq-q{padding:18px 24px;font-weight:700;font-size:16px;color:var(--navy2);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .faq-q:hover{background:#fafbfc}
+  .faq-q .arrow{font-size:12px;color:var(--muted);flex-shrink:0;transition:transform .2s}
+  .faq-a{padding:0 24px 18px;color:#333;font-size:15px;display:none}
+  .faq-a p{margin:0 0 10px}
+  .faq-a p:last-child{margin:0}
+  .faq-a ul{margin:8px 0;padding-left:20px}
+  .faq-a li{margin:4px 0}
+  .faq-a a{color:var(--low)}
+  .faq-a code{background:#f1f4f7;border:1px solid #e2e8ee;border-radius:5px;padding:1px 5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+  .faq-item.open .faq-q .arrow{transform:rotate(180deg)}
+  .faq-item.open .faq-a{display:block}
+  .section-head{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--teal-lo);margin:26px 0 10px}
+  .section-head:first-child{margin-top:0}
+  .cta-wrap{text-align:center;margin-top:26px}
+  .cta-scan{display:inline-block;background:var(--teal);color:#fff;font-weight:800;text-decoration:none;padding:14px 32px;border-radius:12px}
+  .cta-scan:hover{filter:brightness(1.07)}
+  footer{max-width:760px;margin:0 auto;padding:14px 20px 40px;color:var(--muted);font-size:12px;text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="home" href="/">← Back to scanner</a>
+    <h1>Frequently asked questions</h1>
+    <p class="sub">Everything you need to know about CyberScore — how it works, how to read results,
+      and how to improve your score.</p>
+  </div>
+</header>
+
+<main>
+  <p class="section-head">General</p>
+  <div class="card">
+    <div class="faq-item open">
+      <div class="faq-q">Is CyberScore free? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Yes. Scanning a domain, URL or email headers is completely free and requires
+        no account, no sign-up and no credit card. There are no hidden limits on the number of scans.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Do I need to install anything? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>No. CyberScore runs entirely in the cloud. Enter a domain or URL in the
+        scanner and results appear in your browser — nothing to download or configure.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Who built CyberScore? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>CyberScore is built by <strong>VortiSec</strong>, a security-focused software
+        company. It is designed for website owners, developers and security professionals who want a quick,
+        honest assessment of a site's publicly visible security posture. <a href="/about">Read more →</a></p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What languages does CyberScore support? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>The scanner is available in English at <a href="/">cyberscore.cc</a>
+        and in Greek at <a href="/el">cyberscore.cc/el</a>. The guides and documentation are currently
+        in English.</p></div>
+    </div>
+  </div>
+
+  <p class="section-head">Scanning &amp; results</p>
+  <div class="card">
+    <div class="faq-item">
+      <div class="faq-q">What does CyberScore actually check? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>CyberScore runs five independent checks:</p>
+        <ul>
+          <li><strong>HTTPS &amp; TLS</strong> — protocol versions, cipher suites, certificate validity and forward secrecy.</li>
+          <li><strong>HTTP security headers</strong> — HSTS, Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, Referrer-Policy and Permissions-Policy.</li>
+          <li><strong>DNS configuration</strong> — CAA records, name-server consistency.</li>
+          <li><strong>Email authentication</strong> — SPF, DKIM and DMARC records.</li>
+          <li><strong>Technology detection</strong> — software and version disclosure in headers.</li>
+        </ul>
+        <p>The URL check and email-header analyser are separate tools available from the main scanner page.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Is it safe and legal to scan any website? <span class="arrow">▼</span></div>
+      <div class="faq-a">
+        <p>CyberScore performs <strong>passive checks only</strong> — it reads publicly available
+          information using the same DNS queries and HTTP requests any browser would make. It never sends
+          attack payloads, never probes internal infrastructure and never accesses anything that is not
+          publicly visible. This makes it safe and legal to use on any public website.</p>
+        <p>As a matter of good practice, scan only sites you own or have been authorised to test.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Does CyberScore store my scan results? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>No. Results are computed on demand and returned to your browser. CyberScore
+        does not store scan results associated with your identity, build a history of scanned domains or
+        share data with third parties beyond what is needed for reputation lookups (the domain or URL is
+        sent to reputation providers to check against their databases). See our
+        <a href="/privacy">Privacy Policy</a> for the full details.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How long does a scan take? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>A standard scan typically completes in 5–15 seconds. The five checking
+        modules (HTTPS, headers, DNS, email, technology) run in parallel, so the total time is roughly
+        that of the slowest module. The Deep TLS scan takes a little longer — usually 15–30 seconds —
+        because it performs a more thorough TLS protocol assessment.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can I scan an IP address instead of a domain? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>The main scanner is optimised for domain names and will extract the hostname
+        from whatever you enter (including full URLs like <code>https://example.com/page</code>). Raw IP
+        addresses can be entered but some checks (like DNS and email authentication) will return no results
+        because they rely on domain names. For the URL analyser, raw IPs are accepted and
+        flagged as a warning signal.</p></div>
+    </div>
+  </div>
+
+  <p class="section-head">Understanding your score</p>
+  <div class="card">
+    <div class="faq-item">
+      <div class="faq-q">How is the score calculated? <span class="arrow">▼</span></div>
+      <div class="faq-a">
+        <p>The score starts at 100. Each finding deducts points based on its severity:</p>
+        <ul>
+          <li><strong>HIGH</strong> — deducts 20 points (e.g. no HTTPS, missing SPF).</li>
+          <li><strong>MEDIUM</strong> — deducts 10 points (e.g. missing HSTS, no DMARC enforcement).</li>
+          <li><strong>LOW</strong> — deducts 3 points, capped at 20 total from low findings.</li>
+        </ul>
+        <p>The score cannot go below 0. <a href="/guides/what-is-a-security-score">Read the full scoring guide →</a></p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What does each grade mean? <span class="arrow">▼</span></div>
+      <div class="faq-a">
+        <ul>
+          <li><strong>A (90–100)</strong> — excellent. All major controls are in place.</li>
+          <li><strong>B (75–89)</strong> — good. A few best-practice gaps remain.</li>
+          <li><strong>C (55–74)</strong> — fair. Several medium issues need attention.</li>
+          <li><strong>D (35–54)</strong> — poor. Meaningful security risks are present.</li>
+          <li><strong>F (0–34)</strong> — failing. Critical gaps that should be fixed immediately.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">My site scored an F. Where do I start? <span class="arrow">▼</span></div>
+      <div class="faq-a">
+        <p>Open the <strong>Remediation</strong> tab in your scan results. All findings are sorted by
+          severity (highest first) with copy-ready configuration snippets. Fix HIGH issues first — each
+          one is worth 20 points and usually involves enabling HTTPS or adding email authentication
+          records. MEDIUM issues (10 points each) are typically missing security headers, which can be
+          added in a few lines of server configuration.</p>
+        <p>Our <a href="/guides/common-web-vulnerabilities">common vulnerabilities guide</a> covers the
+          most frequent findings with step-by-step fixes.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Does a high score mean my site is secure? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>A high score means the common, automatable baseline controls are in place —
+        HTTPS is configured correctly, security headers are present, email is authenticated. It does
+        <em>not</em> mean the application is free of SQL injection, that access controls are correct or
+        that there are no logic vulnerabilities. Those require manual testing or a penetration test.
+        Think of a CyberScore result as a <strong>hygiene baseline</strong>: necessary but not
+        sufficient on its own.</p></div>
+    </div>
+  </div>
+
+  <p class="section-head">Email &amp; URL tools</p>
+  <div class="card">
+    <div class="faq-item">
+      <div class="faq-q">How does the email header analyser work? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Paste the full raw headers from a suspicious email (available via "Show
+        original", "View source" or similar in your mail client). CyberScore parses the
+        <code>Authentication-Results</code> header to read SPF, DKIM and DMARC pass/fail verdicts,
+        checks for mismatches between the From address, Return-Path and Reply-To, and identifies
+        common spoofing signals. No email is sent — only the headers you paste are analysed.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What does the URL checker look for? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>The URL checker inspects the structure of a URL for phishing signals:
+        dangerous schemes (<code>javascript:</code>, <code>data:</code>), embedded credentials
+        (<code>paypal.com@evil.tld</code> tricks), raw IP addresses, punycode look-alike domains,
+        risky TLDs, URL shorteners and credential-harvesting keywords. It also follows the redirect
+        chain once to see the final destination, and checks the URL against multi-engine reputation
+        databases (URLhaus, Google Safe Browsing, VirusTotal where keys are configured).</p></div>
+    </div>
+  </div>
+
+  <p class="section-head">Still have questions?</p>
+  <div class="card">
+    <div class="faq-item">
+      <div class="faq-q">How do I contact the CyberScore team? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Use the <a href="/contact">contact form</a> or email us directly at
+        <a href="mailto:info@cyberscore.cc">info@cyberscore.cc</a>. We read every message and try
+        to reply within a couple of business days.</p></div>
+    </div>
+  </div>
+
+  <div class="cta-wrap">
+    <a class="cta-scan" href="/">Start a free scan →</a>
+  </div>
+</main>
+
+<footer>CyberScore · cyberscore.cc · powered by VortiSec · <a href="/about">About</a> · <a href="/faq">FAQ</a> · <a href="/guides">Guides</a> · <a href="/privacy">Privacy</a> · <a href="/contact">Contact</a></footer>
+
+<script>
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.closest('.faq-item');
+    item.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>
