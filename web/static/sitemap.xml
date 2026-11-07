@@ -38,6 +38,36 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://cyberscore.cc/guides/what-is-a-security-score</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cyberscore.cc/guides/dns-security</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cyberscore.cc/guides/cookie-security</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cyberscore.cc/guides/common-web-vulnerabilities</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cyberscore.cc/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://cyberscore.cc/faq</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://cyberscore.cc/contact</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
