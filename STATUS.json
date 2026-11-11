@@ -1,0 +1,36 @@
+{
+  "name": "Cyberscore.cc",
+  "updated": "2026-11-04",
+  "summary": "Passive security scanner (FastAPI + Chromium) behind Caddy. Security review done: SSRF/DoS findings fixed in code (scanner/netguard.py + web/app.py + urlcheck). Pending items below are mostly ops/hardening plus future features.",
+  "tasks": [
+    {
+      "title": "Firewall / port-binding check στον VPS",
+      "priority": "high",
+      "status": "todo",
+      "notes": "Βεβαιώσου ότι ο license (VortiLS) και ο update (VortiUpdate) server ΔΕΝ είναι εκτεθειμένοι σε admin πόρτες πάνω στη δημόσια IP 38.45.81.177. Ο SSRF guard μπλοκάρει private IPs αλλά όχι public IP:port. Λύση σε επίπεδο firewall/Docker port-binding, όχι κώδικα."
+    },
+    {
+      "title": "Ανθεκτικό rate limiting",
+      "priority": "medium",
+      "status": "todo",
+      "notes": "Το τωρινό rate-limit είναι in-memory per-process (μετράει ανά uvicorn worker). Για σωστό όριο: Redis ή rate limiting στο Caddy."
+    },
+    {
+      "title": "DNS rebinding στον Chromium (screenshots)",
+      "priority": "low",
+      "status": "known-risk",
+      "notes": "Ο route-guard κόβει redirects σε internal hosts, αλλά ο Chromium κάνει δικό του DNS resolve (μικρό residual rebinding window). Πλήρης λύση: egress proxy που φιλτράρει IPs."
+    },
+    {
+      "title": "Reputation API keys (προαιρετικά)",
+      "priority": "low",
+      "status": "optional",
+      "notes": "URLHAUS_AUTH_KEY, GOOGLE_SAFE_BROWSING_KEY, VIRUSTOTAL_API_KEY στο .env για καλύτερα αποτελέσματα. Χωρίς αυτά δουλεύει με heuristics."
+    }
+  ],
+  "blockers": [],
+  "depends_on": [
+    "Caddyfile κοινό με license.vortisec.com + update.vortisec.com (single-file bind mount — προσοχή σε αλλαγές)",
+    "Deploy: git push -> στον VPS git pull && docker compose up -d --build"
+  ]
+}
