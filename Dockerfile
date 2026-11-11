@@ -6,10 +6,14 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
+# libatomic1 is required by Playwright's Node.js binary (missing from slim).
+RUN apt-get update && apt-get install -y --no-install-recommends libatomic1 \
+ && rm -rf /var/lib/apt/lists/*
+
 # Python deps + Playwright Chromium (for the URL-check page preview).
 COPY requirements.txt .
-RUN python -m pip install --no-cache-dir -r requirements.txt playwright \
- && python -m playwright install --with-deps chromium
+RUN pip install --no-cache-dir -r requirements.txt playwright \
+ && playwright install --with-deps chromium
 
 # App code
 COPY . .
