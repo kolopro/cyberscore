@@ -72,6 +72,10 @@ class UrlRequest(BaseModel):
     screenshot: bool = True
 
 
+class DnsZoneRequest(BaseModel):
+    target: str
+
+
 def _stamp() -> str:
     return "Generated " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 
@@ -188,6 +192,22 @@ def api_tls_deep(req: ScanRequest, request: Request) -> JSONResponse:
     payload = mod.to_dict()
     payload["target"] = host
     payload["remediation"] = remediation.build_plan(mod.findings)
+    payload["scanned_at"] = _stamp()
+    return JSONResponse(payload)
+
+
+@app.post("/api/dns-zone")
+def api_dns_zone(req: DnsZoneRequest, request: Request) -> JSONResponse:
+    """Enumerate DNS zone records: AXFR attempt + all record types + common subdomains."""
+    _enforce_rate(request)
+    try:
+        host = normalize_target(req.target)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    _require_public(host)
+
+    from scanner.dns import zone as dns_zone
+    payload = dns_zone.run(host)
     payload["scanned_at"] = _stamp()
     return JSONResponse(payload)
 
