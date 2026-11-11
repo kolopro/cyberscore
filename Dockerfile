@@ -8,8 +8,8 @@ WORKDIR /app
 
 # Python deps + Playwright Chromium (for the URL-check page preview).
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt playwright \
- && playwright install --with-deps chromium
+RUN python -m pip install --no-cache-dir -r requirements.txt playwright \
+ && python -m playwright install --with-deps chromium
 
 # App code
 COPY . .
