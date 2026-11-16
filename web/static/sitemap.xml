@@ -77,4 +77,30 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://cyberscore.cc/guides/open-ports</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cyberscore.cc/guides/el-vasmos-asfaleias</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://cyberscore.cc/guides/el-vasmos-asfaleias"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cyberscore.cc/guides/what-is-a-security-score"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cyberscore.cc/guides/el-headers-asfaleias</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://cyberscore.cc/guides/el-headers-asfaleias"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cyberscore.cc/guides/http-security-headers"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cyberscore.cc/guides/el-asfaleia-email</loc>
+    <xhtml:link rel="alternate" hreflang="el" href="https://cyberscore.cc/guides/el-asfaleia-email"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cyberscore.cc/guides/spf-dkim-dmarc"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>

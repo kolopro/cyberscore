@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SPF, DKIM, DMARC: Ασφάλεια email και αποτροπή πλαστογράφησης · CyberScore</title>
+<meta name="description" content="Πώς λειτουργούν τα SPF, DKIM και DMARC, γιατί είναι απαραίτητα για κάθε domain και οδηγίες βήμα-βήμα για να τα ρυθμίσεις στο DNS σου.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cyberscore.cc/guides/el-asfaleia-email">
+<link rel="alternate" hreflang="el" href="https://cyberscore.cc/guides/el-asfaleia-email">
+<link rel="alternate" hreflang="en" href="https://cyberscore.cc/guides/spf-dkim-dmarc">
+<meta property="og:title" content="SPF, DKIM, DMARC: Ασφάλεια email και αποτροπή πλαστογράφησης">
+<meta property="og:description" content="Τα τρία πρωτόκολλα που σταματούν την πλαστογράφηση email και βελτιώνουν την παραδοσιμότητα — με οδηγίες DNS.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cyberscore.cc/guides/el-asfaleia-email">
+<meta property="og:image" content="https://cyberscore.cc/static/img/og.png">
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2727863150599775" crossorigin="anonymous"></script>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
+<style>
+  :root{
+    --ink:#1f2933; --muted:#616e7c; --line:#dfe4e8; --bg:#eef1f4;
+    --card:#ffffff; --navy1:#273244; --navy2:#161c27; --teal:#f59e0b; --teal-lo:#a9700a; --low:#2471a3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:linear-gradient(160deg,var(--navy1),var(--navy2));color:#eafcff;padding:26px 20px 34px}
+  header .wrap{max-width:760px;margin:0 auto}
+  header a.home{color:#bfe3ea;text-decoration:none;font-size:13px;font-weight:600}
+  header a.home:hover{text-decoration:underline}
+  header .kicker{display:block;margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffc247}
+  header h1{margin:6px 0 0;font-size:28px;line-height:1.25;letter-spacing:.2px}
+  header .sub{color:#cfd8e2;margin:10px 0 0;font-size:15px}
+  main{max-width:760px;margin:24px auto 0;padding:0 20px 50px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 34px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  article h2{font-size:20px;color:var(--navy2);margin:30px 0 8px}
+  article h2:first-of-type{margin-top:4px}
+  article h3{font-size:16px;color:var(--navy2);margin:22px 0 4px}
+  p,li{color:#333}
+  a{color:var(--low)}
+  ul,ol{padding-left:22px;margin:8px 0}
+  li{margin:5px 0}
+  code{background:#f1f4f7;border:1px solid #e2e8ee;border-radius:5px;padding:1px 5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:#0b3a53;word-break:break-word}
+  pre{background:#161c27;color:#e6edf3;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px;line-height:1.55;margin:10px 0}
+  pre code{background:none;border:0;color:inherit;padding:0}
+  .tldr{background:#fff8ec;border:1px solid #f3d9a6;border-radius:10px;padding:14px 18px;margin:0 0 20px}
+  .tldr b{color:#8a5a0c}
+  .note{background:#f3f7fa;border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:8px;padding:12px 16px;font-size:14.5px;color:#2c3a46;margin:14px 0}
+  .cta-scan{display:block;text-align:center;background:var(--teal);color:#fff;font-weight:800;text-decoration:none;padding:15px;border-radius:12px;margin:26px 0 0}
+  .cta-scan:hover{filter:brightness(1.07)}
+  .related{margin:26px 0 0;border-top:1px solid var(--line);padding-top:14px}
+  .related b{color:var(--navy2)}
+  .related a{display:block;margin:6px 0;font-weight:600}
+  footer{max-width:760px;margin:0 auto;padding:14px 20px 40px;color:var(--muted);font-size:12px;text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="home" href="/el">← Πίσω στο CyberScore</a>
+    <span class="kicker">Email · DNS</span>
+    <h1>SPF, DKIM &amp; DMARC: Ασφάλεια email</h1>
+    <p class="sub">Τα τρία πρωτόκολλα που αποτρέπουν την πλαστογράφηση email,
+      βελτιώνουν την παραδοσιμότητα και προστατεύουν τους παραλήπτες σου.</p>
+  </div>
+</header>
+
+<main>
+<article class="card">
+  <div class="tldr"><b>Με λίγα λόγια:</b> Χωρίς SPF, DKIM και DMARC, οποιοσδήποτε μπορεί να στείλει email που φαίνεται να προέρχεται από το domain σου. Τα τρία αυτά πρωτόκολλα ορίζονται σε εγγραφές DNS και επαληθεύουν ότι τα email είναι γνήσια — αποτρέποντας phishing, spam και πλαστογράφηση.</div>
+
+  <h2>Γιατί χρειάζεσαι email authentication;</h2>
+  <p>Το πρωτόκολλο email (SMTP) σχεδιάστηκε τη δεκαετία του 1980, πριν υπάρχουν ανησυχίες ασφάλειας. Από μόνο του, δεν επαληθεύει ποιος στέλνει ένα μήνυμα — ό,τι γράφει το πεδίο «Από:» εμφανίζεται στον παραλήπτη, χωρίς καμία επαλήθευση. Αυτό σημαίνει ότι:</p>
+  <ul>
+    <li>Επιτιθέμενοι μπορούν να στείλουν phishing email «από» info@τοdomain-σου.gr</li>
+    <li>Το domain σου μπορεί να χρησιμοποιηθεί για spam χωρίς να το ξέρεις</li>
+    <li>Τα νόμιμα email σου μπορεί να πηγαίνουν στα spam των παραληπτών</li>
+  </ul>
+  <p>Τα SPF, DKIM και DMARC λύνουν αυτό το πρόβλημα: ορίζουν ποιοι servers επιτρέπεται να στέλνουν email για λογαριασμό του domain σου και τι να κάνουν οι servers παραλαβής αν λάβουν ένα ανεπαλήθευτο μήνυμα.</p>
+
+  <h2>SPF — Sender Policy Framework</h2>
+  <p>Το SPF ορίζει ποιοι mail servers επιτρέπεται να στέλνουν email για το domain σου. Λειτουργεί σαν μια λίστα εγκεκριμένων αποστολέων που αποθηκεύεται ως εγγραφή TXT στο DNS σου.</p>
+  <p>Παράδειγμα SPF για domain που χρησιμοποιεί Google Workspace:</p>
+  <pre><code># Εγγραφή TXT στο DNS σου
+example.gr. IN TXT "v=spf1 include:_spf.google.com ~all"</code></pre>
+  <p>Τα κύρια στοιχεία:</p>
+  <ul>
+    <li><code>v=spf1</code> — ορίζει ότι πρόκειται για SPF εγγραφή</li>
+    <li><code>include:_spf.google.com</code> — επιτρέπει τους servers της Google</li>
+    <li><code>~all</code> — soft fail: τα email από άλλους servers επισημαίνονται (αλλά δεν απορρίπτονται)</li>
+    <li><code>-all</code> — hard fail: τα email από άλλους servers απορρίπτονται</li>
+  </ul>
+  <div class="note">Αν στέλνεις email και μέσω άλλων υπηρεσιών (Mailchimp, SendGrid κ.λπ.), πρόσθεσε τα <code>include:</code> τους πριν βάλεις <code>-all</code>.</div>
+
+  <h2>DKIM — DomainKeys Identified Mail</h2>
+  <p>Το DKIM προσθέτει μια ψηφιακή υπογραφή σε κάθε email που στέλνεις. Ο server παραλαβής επαληθεύει την υπογραφή χρησιμοποιώντας ένα δημόσιο κλειδί που είναι αποθηκευμένο στο DNS σου. Αν η υπογραφή είναι έγκυρη, το email είναι γνήσιο και δεν έχει παραποιηθεί στη διαδρομή.</p>
+  <p>Η εγγραφή DKIM μοιάζει ως εξής (το δημόσιο κλειδί παρέχεται από τον mail provider σου):</p>
+  <pre><code># Εγγραφή TXT στο DNS (το "default" είναι το selector)
+default._domainkey.example.gr. IN TXT "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEB..."</code></pre>
+  <div class="note">Τα Google Workspace, Microsoft 365, Zoho Mail κ.ά. παρέχουν τα DKIM κλειδιά τους μέσα από τις ρυθμίσεις τους — δεν χρειάζεται να τα δημιουργήσεις μόνος σου.</div>
+
+  <h2>DMARC — Domain-based Message Authentication</h2>
+  <p>Το DMARC είναι το «σύνδεσμος» μεταξύ SPF και DKIM. Λέει στους mail servers παραλαβής: «αν ένα email από το domain μου αποτύχει στον έλεγχο SPF ή DKIM, κάνε αυτό». Επίσης στέλνει αναφορές στο email σου για κάθε αποτυχημένη παράδοση.</p>
+  <pre><code># Εγγραφή TXT για DMARC
+_dmarc.example.gr. IN TXT "v=DMARC1; p=quarantine; rua=mailto:dmarc@example.gr; pct=100"</code></pre>
+  <p>Οι τιμές για το <code>p</code> (policy):</p>
+  <ul>
+    <li><code>p=none</code> — Μόνο αναφορές, καμία δράση. Ξεκίνα εδώ για να ελέγξεις αν θα σπάσει κάτι.</li>
+    <li><code>p=quarantine</code> — Τα αποτυχημένα email πηγαίνουν στα spam.</li>
+    <li><code>p=reject</code> — Τα αποτυχημένα email απορρίπτονται εντελώς. Ο στόχος σου.</li>
+  </ul>
+
+  <h2>Βήμα-βήμα: Πώς να ξεκινήσεις</h2>
+  <ol>
+    <li><b>Ρύθμισε SPF</b> — Πρόσθεσε TXT εγγραφή με <code>v=spf1 include:τον_mail_provider_σου ~all</code>.</li>
+    <li><b>Ενεργοποίησε DKIM</b> — Από το control panel του mail provider σου, ενεργοποίησε DKIM και πρόσθεσε την TXT εγγραφή στο DNS.</li>
+    <li><b>Ξεκίνα DMARC με <code>p=none</code></b> — Πρόσθεσε TXT εγγραφή <code>_dmarc.yourdomain.com</code> με <code>p=none</code> και <code>rua=mailto:σου@email</code>.</li>
+    <li><b>Παρακολούθησε τις αναφορές</b> — Για 2–4 εβδομάδες, διάβασε τις αναφορές DMARC για να βεβαιωθείς ότι όλα τα νόμιμα email σου περνούν.</li>
+    <li><b>Αυστηροποίησε σε <code>p=quarantine</code> και μετά <code>p=reject</code></b> — Μόλις είσαι βέβαιος ότι δεν θα χάσεις νόμιμα email.</li>
+  </ol>
+
+  <h2>Τι ελέγχει το CyberScore για το email</h2>
+  <p>Το CyberScore ελέγχει αυτόματα αν το domain σου έχει SPF, DKIM και DMARC εγγραφές, αν οι τιμές τους είναι ορθές και αν η DMARC policy είναι αρκετά αυστηρή για να προστατεύει από πλαστογράφηση. Για κάθε πρόβλημα, παρέχει συγκεκριμένες οδηγίες διόρθωσης.</p>
+
+  <a class="cta-scan" href="/">Έλεγξε το email authentication του domain σου →</a>
+
+  <div class="related">
+    <b>Σχετικοί οδηγοί</b>
+    <a href="/guides/el-vasmos-asfaleias">Τι είναι ο βαθμός ασφάλειας; →</a>
+    <a href="/guides/el-headers-asfaleias">Κεφαλίδες ασφάλειας HTTP →</a>
+    <a href="/guides/spf-dkim-dmarc">Stop email spoofing: SPF, DKIM &amp; DMARC (English) →</a>
+  </div>
+</article>
+</main>
+
+<footer>CyberScore · cyberscore.cc · powered by VortiSec · <a href="/el">Αρχική</a> · <a href="/guides">Οδηγοί</a> · <a href="/privacy">Απόρρητο</a> · <a href="/contact">Επικοινωνία</a></footer>
+</body>
+</html>

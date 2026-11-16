@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Open Ports &amp; Attack Surface Reduction · CyberScore</title>
+<meta name="description" content="What open ports are, which ones are dangerous, and how to reduce your attack surface by auditing exposed services — with practical steps for firewalls and server hardening.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cyberscore.cc/guides/open-ports">
+<meta property="og:title" content="Open Ports &amp; Attack Surface Reduction">
+<meta property="og:description" content="What open ports mean for your security, which services to expose and which to lock down, and how to audit and reduce your attack surface.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://cyberscore.cc/guides/open-ports">
+<meta property="og:image" content="https://cyberscore.cc/static/img/og.png">
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2727863150599775" crossorigin="anonymous"></script>
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
+<style>
+  :root{
+    --ink:#1f2933; --muted:#616e7c; --line:#dfe4e8; --bg:#eef1f4;
+    --card:#ffffff; --navy1:#273244; --navy2:#161c27; --teal:#f59e0b; --teal-lo:#a9700a; --low:#2471a3;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+  header{background:linear-gradient(160deg,var(--navy1),var(--navy2));color:#eafcff;padding:26px 20px 34px}
+  header .wrap{max-width:760px;margin:0 auto}
+  header a.home{color:#bfe3ea;text-decoration:none;font-size:13px;font-weight:600}
+  header a.home:hover{text-decoration:underline}
+  header .kicker{display:block;margin-top:12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffc247}
+  header h1{margin:6px 0 0;font-size:28px;line-height:1.25;letter-spacing:.2px}
+  header .sub{color:#cfd8e2;margin:10px 0 0;font-size:15px}
+  main{max-width:760px;margin:24px auto 0;padding:0 20px 50px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:28px 34px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+  article h2{font-size:20px;color:var(--navy2);margin:30px 0 8px}
+  article h2:first-of-type{margin-top:4px}
+  article h3{font-size:16px;color:var(--navy2);margin:22px 0 4px}
+  p,li{color:#333}
+  a{color:var(--low)}
+  ul,ol{padding-left:22px;margin:8px 0}
+  li{margin:5px 0}
+  code{background:#f1f4f7;border:1px solid #e2e8ee;border-radius:5px;padding:1px 5px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13.5px;color:#0b3a53;word-break:break-word}
+  pre{background:#161c27;color:#e6edf3;padding:14px 16px;border-radius:10px;overflow:auto;font-size:13px;line-height:1.55;margin:10px 0}
+  pre code{background:none;border:0;color:inherit;padding:0}
+  .tldr{background:#fff8ec;border:1px solid #f3d9a6;border-radius:10px;padding:14px 18px;margin:0 0 20px}
+  .tldr b{color:#8a5a0c}
+  .note{background:#f3f7fa;border:1px solid var(--line);border-left:3px solid var(--teal);border-radius:8px;padding:12px 16px;font-size:14.5px;color:#2c3a46;margin:14px 0}
+  .port-table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0}
+  .port-table th{text-align:left;padding:8px 12px;background:#f1f4f7;border:1px solid var(--line);color:var(--navy2);font-size:13px}
+  .port-table td{padding:8px 12px;border:1px solid var(--line);vertical-align:top}
+  .risk-high{color:#c0392b;font-weight:700}
+  .risk-med{color:#d97706;font-weight:700}
+  .risk-low{color:#1a7f3c;font-weight:700}
+  .cta-scan{display:block;text-align:center;background:var(--teal);color:#fff;font-weight:800;text-decoration:none;padding:15px;border-radius:12px;margin:26px 0 0}
+  .cta-scan:hover{filter:brightness(1.07)}
+  .related{margin:26px 0 0;border-top:1px solid var(--line);padding-top:14px}
+  .related b{color:var(--navy2)}
+  .related a{display:block;margin:6px 0;font-weight:600}
+  footer{max-width:760px;margin:0 auto;padding:14px 20px 40px;color:var(--muted);font-size:12px;text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="home" href="/guides">← All guides</a>
+    <span class="kicker">Network · Infrastructure</span>
+    <h1>Open ports &amp; attack surface reduction</h1>
+    <p class="sub">What open ports reveal about your server, which services belong on the public internet
+      and which don't, and how to close the gaps attackers use most.</p>
+  </div>
+</header>
+
+<main>
+<article class="card">
+  <div class="tldr"><b>In short:</b> Every open port is a potential entry point. Attackers scan the entire internet for open ports in minutes, probing each one for known vulnerabilities. The goal is to expose only what you absolutely must — and ensure everything that is exposed is patched, properly configured, and monitored.</div>
+
+  <h2>What is a port and why does it matter?</h2>
+  <p>A <strong>port</strong> is a numbered endpoint on a server — a virtual "door" through which a specific service communicates. Port 80 is HTTP, port 443 is HTTPS, port 22 is SSH. When a service is running and accepting connections on a port, that port is said to be <em>open</em>. When no service is listening or a firewall blocks access, it is <em>closed</em> or <em>filtered</em>.</p>
+  <p>Your <strong>attack surface</strong> is the total set of points where an attacker can try to interact with your system. Every open port is part of that surface. A well-configured server running only a web server and nothing else is dramatically safer than one with dozens of open ports from forgotten services or development tools left running.</p>
+
+  <h2>How attackers use open ports</h2>
+  <p>Automated scanners — tools like Shodan and Masscan — continuously map every IP address on the internet. Within minutes of a server going online, bots are already probing its ports. For each open port they find, they:</p>
+  <ul>
+    <li>Identify the service and its version from its banner response</li>
+    <li>Check whether that version has known CVEs (published vulnerabilities)</li>
+    <li>Try default credentials on login services (SSH, RDP, database ports)</li>
+    <li>Probe for misconfigurations — anonymous FTP, unauthenticated Redis, open MongoDB</li>
+  </ul>
+  <p>This is not targeted hacking — it is opportunistic automation that never sleeps. A misconfigured open port discovered at 3 AM is probed within minutes.</p>
+
+  <h2>Common ports and their risk level</h2>
+  <table class="port-table">
+    <tr><th>Port</th><th>Service</th><th>Risk if exposed publicly</th></tr>
+    <tr><td><code>80</code></td><td>HTTP</td><td class="risk-low">Expected — should redirect to 443</td></tr>
+    <tr><td><code>443</code></td><td>HTTPS</td><td class="risk-low">Expected — keep patched</td></tr>
+    <tr><td><code>22</code></td><td>SSH</td><td class="risk-med">Medium — disable password auth, use key-based only; consider changing the port or restricting by IP</td></tr>
+    <tr><td><code>21</code></td><td>FTP</td><td class="risk-high">High — plaintext, often anonymous; replace with SFTP (port 22) or FTPS</td></tr>
+    <tr><td><code>23</code></td><td>Telnet</td><td class="risk-high">Critical — plaintext protocol, never expose publicly</td></tr>
+    <tr><td><code>3306</code></td><td>MySQL</td><td class="risk-high">High — should never be publicly accessible; bind to 127.0.0.1</td></tr>
+    <tr><td><code>5432</code></td><td>PostgreSQL</td><td class="risk-high">High — bind to localhost only; use SSH tunnels for remote access</td></tr>
+    <tr><td><code>6379</code></td><td>Redis</td><td class="risk-high">Critical — no authentication by default; bind to 127.0.0.1</td></tr>
+    <tr><td><code>27017</code></td><td>MongoDB</td><td class="risk-high">Critical — many breaches from open MongoDB; always require auth and bind to localhost</td></tr>
+    <tr><td><code>3389</code></td><td>RDP</td><td class="risk-high">High — massively brute-forced; restrict by IP or use a VPN gateway</td></tr>
+    <tr><td><code>8080 / 8443</code></td><td>Alt HTTP/HTTPS</td><td class="risk-med">Medium — often dev servers or admin panels accidentally left open</td></tr>
+  </table>
+
+  <h2>Principle of least exposure</h2>
+  <p>The guiding principle of attack surface reduction is simple: <em>expose only what you must, to only those who need it, and nothing more</em>. In practice this means:</p>
+  <ul>
+    <li><b>Close every port that isn't needed.</b> If you do not have an FTP requirement, disable the FTP service entirely — not just block it at the firewall.</li>
+    <li><b>Bind internal services to localhost.</b> Database servers, caches and admin panels should listen only on <code>127.0.0.1</code>, not on <code>0.0.0.0</code>.</li>
+    <li><b>Restrict management ports by IP.</b> SSH, RDP and admin panels should only be reachable from your known IP address ranges, via firewall rules.</li>
+    <li><b>Use a VPN for internal tools.</b> Instead of exposing a monitoring dashboard on port 3000, put it behind a VPN. Attackers cannot attack what they cannot reach.</li>
+  </ul>
+
+  <h2>Firewall basics</h2>
+  <p>A firewall is your first line of defence — it drops traffic to closed ports before any service sees it. On Linux servers, <code>ufw</code> (Uncomplicated Firewall) makes this straightforward:</p>
+  <pre><code># Allow only HTTP, HTTPS and SSH from anywhere
+ufw default deny incoming
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw allow from YOUR_IP to any port 22
+ufw enable</code></pre>
+  <div class="note">Cloud providers (AWS, GCP, Hetzner, DigitalOcean) also offer security groups or firewall rules at the network level — these are independent of the OS firewall and provide an additional layer. Use both.</div>
+
+  <h2>How to audit your own open ports</h2>
+  <p>You can check what ports your server is listening on from within the server itself:</p>
+  <pre><code># See all listening ports (Linux)
+ss -tlnp
+
+# Or with netstat
+netstat -tlnp</code></pre>
+  <p>To see what an attacker sees from outside, you need an external scan. CyberScore's DNS zone tab shows the subdomains your domain resolves to; for a full port audit, tools like Nmap are the standard — but always scan only servers you own or have explicit permission to test.</p>
+
+  <h2>Server banner suppression</h2>
+  <p>Even when a port must be open, you can reduce what it reveals. By default, many services announce their exact software version in their banner response — giving attackers an easy lookup for known CVEs. Suppress this where possible:</p>
+  <pre><code># Nginx — suppress version
+server_tokens off;
+
+# Apache — suppress version
+ServerTokens Prod
+ServerSignature Off</code></pre>
+
+  <h2>Keeping the surface small over time</h2>
+  <p>Attack surfaces grow as systems do — a new service gets deployed, a developer opens a port for testing and forgets to close it, an upgrade installs a new daemon. Build auditing into your routine: run a port scan after every deployment, review firewall rules quarterly and remove services that are no longer needed.</p>
+
+  <a class="cta-scan" href="/">Run a CyberScore scan on your domain →</a>
+
+  <div class="related">
+    <b>Related guides</b>
+    <a href="/guides/dns-security">DNS security: CAA records &amp; DNSSEC →</a>
+    <a href="/guides/http-security-headers">HTTP security headers explained →</a>
+    <a href="/guides/common-web-vulnerabilities">Common web vulnerabilities &amp; fixes →</a>
+  </div>
+</article>
+</main>
+
+<footer>CyberScore · cyberscore.cc · powered by VortiSec · <a href="/about">About</a> · <a href="/faq">FAQ</a> · <a href="/guides">Guides</a> · <a href="/privacy">Privacy</a> · <a href="/contact">Contact</a></footer>
+</body>
+</html>
