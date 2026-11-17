@@ -1143,8 +1143,8 @@ const TOOLS = {
 let toolsBuilt = false;
 function buildTools(){
   if(toolsBuilt) return; toolsBuilt = true;
-  let html = `<div class="disclaim">⚠�? Always download from the official website (links below). Verify the site's address before installing anything.</div>`;
-  html += `<h2 class="sec ours">�? Our apps <span class="vsgrad">· powered by VortiSec</span></h2><div class="ourapps">`;
+  let html = `<div class="disclaim">⚠️ Always download from the official website (links below). Verify the site's address before installing anything.</div>`;
+  html += `<h2 class="sec ours">🛡️ Our apps <span class="vsgrad">· powered by VortiSec</span></h2><div class="ourapps">`;
   for(const [nm,desc,img,tag,buttons] of OUR_APPS){
     const shot = img
       ? `<img class="shot" src="${esc(img)}" alt="${esc(nm)} screenshot">`
