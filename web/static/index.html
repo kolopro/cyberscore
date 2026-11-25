@@ -325,6 +325,15 @@
   .ad-slot:empty{display:none}
   .ad-slot::before{content:"Advertisement";display:block;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
   /* footer band */
+  .about-static{background:#f7f9fb;border-top:1px solid #dfe4e8;padding:40px 20px 50px}
+  .about-wrap{max-width:820px;margin:0 auto;color:#2d3748;font-size:15.5px;line-height:1.75}
+  .about-wrap h2{font-size:24px;font-weight:800;color:#1a2535;margin:0 0 14px}
+  .about-wrap h3{font-size:17px;font-weight:700;color:#1a2535;margin:28px 0 8px}
+  .about-wrap p{margin:0 0 14px}
+  .about-wrap ul{margin:8px 0 14px;padding-left:22px}
+  .about-wrap li{margin:5px 0}
+  .about-wrap a{color:#0a6fbd;font-weight:600;text-decoration:none}
+  .about-wrap a:hover{text-decoration:underline}
   footer{color:#b9d0e0;font-size:12.5px;padding:0;margin-top:28px;
     background:linear-gradient(180deg,#132b45,var(--navy0));
     border-top:1px solid rgba(255,255,255,.07)}
@@ -626,6 +635,35 @@
     </div>
 
     <p class="allguides"><a href="/guides">Browse all security guides →</a></p>
+  </div>
+</section>
+
+<section class="about-static" aria-label="About CyberScore">
+  <div class="about-wrap">
+    <h2>What is CyberScore?</h2>
+    <p>CyberScore is a free, passive web security scanner that checks any website's publicly visible security configuration in seconds — no installation, no account, no credit card required. Enter a domain name or URL, and within 15 seconds you receive a letter grade (A+ to F) along with a detailed breakdown of every finding, its severity and copy-ready configuration fixes.</p>
+
+    <h3>What does CyberScore check?</h3>
+    <p>Every scan runs five independent analysis modules in parallel:</p>
+    <ul>
+      <li><strong>HTTPS &amp; TLS</strong> — certificate validity and expiry, protocol versions (TLSv1.3, TLSv1.2 and the deprecated TLSv1.0/1.1), cipher suite strength, forward secrecy and HSTS enforcement.</li>
+      <li><strong>HTTP security headers</strong> — Content-Security-Policy (CSP), Strict-Transport-Security (HSTS), X-Frame-Options, X-Content-Type-Options, Referrer-Policy and Permissions-Policy. Missing or misconfigured headers are the most common cause of a low score.</li>
+      <li><strong>DNS security</strong> — CAA (Certification Authority Authorisation) records that restrict which certificate authorities may issue certificates for your domain, plus name-server consistency checks.</li>
+      <li><strong>Email authentication</strong> — SPF, DKIM and DMARC records. Without all three, your domain can be spoofed in phishing attacks targeting your customers and partners.</li>
+      <li><strong>Technology &amp; version disclosure</strong> — server banners and headers that reveal software names and versions, giving attackers an easy starting point for targeted exploits.</li>
+    </ul>
+
+    <h3>Why web security matters</h3>
+    <p>Over 40 % of data breaches involve a web application. Many of the most damaging attacks — session hijacking, clickjacking, cross-site scripting (XSS), man-in-the-middle interception — are made possible or much easier by missing security headers and misconfigured TLS. The good news is that most of these controls take less than an hour to enable, and their absence is completely avoidable.</p>
+    <p>A site that scores A on CyberScore has closed the most common automated attack paths. It signals to visitors, browsers and security tools that the owner takes security seriously. Sites that handle payments, personal data or sensitive communications have a legal and ethical obligation to implement these baseline controls.</p>
+
+    <h3>Who is CyberScore for?</h3>
+    <p>CyberScore is used by website owners who want a quick hygiene check, by developers who need to verify that security headers are configured after a deployment, by IT teams conducting regular security audits, and by freelancers who need to demonstrate to clients that a site they built meets current security standards. The scanner is entirely passive — it makes only the same requests a browser would, never probing for vulnerabilities or generating attack traffic.</p>
+
+    <h3>How to interpret your score</h3>
+    <p>The score starts at 100. Each HIGH-severity finding deducts 20 points, each MEDIUM deducts 10, and LOW findings deduct 3 each (capped at 20 total). A score of 90 or above earns an <strong>A</strong> grade (excellent); 75–89 earns a <strong>B</strong> (good); 55–74 earns a <strong>C</strong> (fair); 35–54 earns a <strong>D</strong> (poor); and anything below 35 earns an <strong>F</strong> (failing). The <em>Remediation</em> tab in your results lists every finding in priority order with ready-to-use configuration snippets for Apache, Nginx and DNS providers.</p>
+
+    <p><a href="/guides">Read the security guides →</a> &nbsp;·&nbsp; <a href="/faq">Frequently asked questions →</a> &nbsp;·&nbsp; <a href="/about">About CyberScore →</a></p>
   </div>
 </section>
 
@@ -1143,8 +1181,8 @@ const TOOLS = {
 let toolsBuilt = false;
 function buildTools(){
   if(toolsBuilt) return; toolsBuilt = true;
-  let html = `<div class="disclaim">⚠�? Always download from the official website (links below). Verify the site's address before installing anything.</div>`;
-  html += `<h2 class="sec ours">�? Our apps <span class="vsgrad">· powered by VortiSec</span></h2><div class="ourapps">`;
+  let html = `<div class="disclaim">⚠️ Always download from the official website (links below). Verify the site's address before installing anything.</div>`;
+  html += `<h2 class="sec ours">🛡️ Our apps <span class="vsgrad">· powered by VortiSec</span></h2><div class="ourapps">`;
   for(const [nm,desc,img,tag,buttons] of OUR_APPS){
     const shot = img
       ? `<img class="shot" src="${esc(img)}" alt="${esc(nm)} screenshot">`
