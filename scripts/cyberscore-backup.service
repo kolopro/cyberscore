@@ -1,0 +1,10 @@
+[Unit]
+Description=CyberScore encrypted off-site backup
+Wants=network-online.target docker.service
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/cyberscore
+ExecStart=/usr/bin/env bash /root/cyberscore/scripts/backup.sh
+# Keep output in the journal:  journalctl -u cyberscore-backup

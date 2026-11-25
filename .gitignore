@@ -1,0 +1,11 @@
+node_modules/
+dist/
+release/
+.DS_Store
+
+# Secrets & backups — never commit these
+.env
+age-key.txt
+backups/
+restore-*/
+*.tar.age
